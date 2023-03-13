@@ -17,9 +17,9 @@ import { FiMenu } from "react-icons/fi";
 import { FaMoon, FaSun } from "react-icons/fa";
 // import { useTheme } from "@chakra-ui/react";
 // import MP_IMAGE from 'assets/MP.png'
-import { DiTerminalBadge } from "react-icons/di";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { FiSettings } from "react-icons/fi";
+import {GoFile} from "react-icons/go"
 
 import NavLink from "./Navlink";
 
@@ -64,8 +64,8 @@ return (
 
       />
       <HStack alignItems='center' justifyContent='flex-start' as={RouterLink} to='/contact'>
-        <Icon as={DiTerminalBadge} boxSize='50px' position='absolute' transform={"translateX(-30px)"} />
-        <Text>CD PRADETTO</Text>        
+        <Icon as={GoFile} boxSize='25px' position='absolute' transform={"translateX(-20px)"} />
+        <Text>Resumize</Text>        
       </HStack>
       <HStack display={{ base: "none", md: "flex" }} spacing="5">
         {links.map((link) => (

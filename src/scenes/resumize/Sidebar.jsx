@@ -26,6 +26,7 @@ import { InfoOutlineIcon,ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icon
 const Sidebar = () => {
   const [resumeFile, setResumeFile] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
+  const [jobUrl, setJobUrl] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [generateResume, setGenerateResume] = useState(false);
   const [resumeText, setResumeText] = useState('');
@@ -40,6 +41,10 @@ const Sidebar = () => {
 
   const handleSelectedFileChange = (event) => {
     setSelectedFile(event.target.value);
+  };
+
+  const handleJobUrl = (event) => {
+    setJobUrl(event.target.value);
   };
 
   const handleJobDescriptionChange = (event) => {
@@ -134,6 +139,10 @@ const Sidebar = () => {
                   <option value="resume2">Resume 2</option>
                   <option value="resume3">Resume 3</option>
                 </Select>
+              </FormControl>
+              <FormControl marginBottom="20px">
+                <FormLabel htmlFor="job-url">Job Link</FormLabel>
+                <Input type='text' id='job-url' value={jobUrl} onChange={handleJobUrl} />
               </FormControl>
               <FormControl marginBottom="20px">
                 <FormLabel htmlFor="job-description">Paste Job Description</FormLabel>
