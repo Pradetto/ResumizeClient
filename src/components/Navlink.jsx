@@ -3,7 +3,7 @@ import { useLocation, NavLink as RouterNavLink } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 
 
-const NavLink = ({ to, children, onClose,finalFocusRef }) => {
+const NavLink = ({ to, children, onClose,onClick }) => {
   const activeColor = useColorModeValue("purple.600", "purple.200");
   const { pathname } = useLocation();
   const isActive = pathname === to;
@@ -12,6 +12,15 @@ const NavLink = ({ to, children, onClose,finalFocusRef }) => {
 //     ? theme.colors.purple[50]
 //     : theme.colors.brand.light["400"];
   const hoverBg = useColorModeValue("purple.100", "purple.900");
+
+  const handleClick = () => {
+    if (onClose){
+      onClose()
+    }
+    if (onClick){
+      onClick()   
+    }
+  }
   return (
       <Box
       as={RouterNavLink}
@@ -26,7 +35,7 @@ const NavLink = ({ to, children, onClose,finalFocusRef }) => {
           bg: hoverBg,
         }}
         className={isActive ? "active" : ""}
-        onClick={onClose}
+        onClick={(onClick || onClose) ? handleClick : undefined}
       >
         {children}
       </Box>

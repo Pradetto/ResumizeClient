@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -22,20 +22,43 @@ import { FiSettings } from "react-icons/fi";
 import {GoFile} from "react-icons/go"
 
 import NavLink from "./Navlink";
-
+import { useIsAuthenticatedQuery, useLogoutUserMutation, useInvalidateTags } from "state/authApi";
+import { authApi } from "state/authApi";
 
 const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-//   const theme = useTheme();
+  const [logoutUser, {isLoading:logoutIsLoading,error:logoutError}] = useLogoutUserMutation()
+  const {data,isLoading,error,refetch}= useIsAuthenticatedQuery()
   const btnRef = useRef(null)
+  const navigate = useNavigate()
+const { invalidateTags } = authApi.util;
 
-  const links = [
+  const linksLoggedOut = [
+    { name: "Home", path: "/home" },
+    { name: "About", path: "/about" },
+    {name: "Login", path: "/login"}
+  ];
+
+  const linksLoggedIn = [
     { name: "Home", path: "/home" },
     { name: "Resumize", path: "/resumize" },
     { name: "Files", path: "/files" },
     { name: "About", path: "/about" },
-  ];
+  ]
+
+  const logoutHandler = async () => {
+    try{
+      await logoutUser()
+      navigate('/home')
+      window.location.reload(); // Force a hard reload of the page
+    } catch(err){
+      console.error('Error logging out',err)
+    }
+  }
+
+  const links = data ? linksLoggedIn : linksLoggedOut;
+  console.log('HERE IS LOGOUT DATA', data)
 return (
   <>
   {/* NAVBAR */}
@@ -73,6 +96,7 @@ return (
             {link.name}
           </NavLink>
         ))}
+        {data && <NavLink to='/login' onClick={logoutHandler}>Logout</NavLink>}
         <IconButton
           variant="ghost"
           onClick={toggleColorMode}
