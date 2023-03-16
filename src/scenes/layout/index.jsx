@@ -3,7 +3,8 @@ import { Box } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
 /* COMPONENTS */
-import Navbar from 'components/Navbar'
+// import Navbar from 'components/Navbar'
+import Navbar from './navbar'
 
 const Layout = () => {
   return (

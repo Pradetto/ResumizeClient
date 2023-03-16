@@ -41,7 +41,7 @@ const About = () => {
           ]
 
   return (
-    <Box bg={bgColor} py={12} minH='calc(100vh - 72px)'>
+    <Box bg={bgColor} py={12} minH='var(--main-container-height)'>
       <Container maxW='container.xl'>
         <VStack spacing={8} align='center' mb={12}>
           <Heading as='h1' size='2xl'>

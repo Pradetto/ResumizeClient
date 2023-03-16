@@ -1,16 +1,19 @@
-import { Button, Container, Flex, Heading, Text, Link } from "@chakra-ui/react";
+import { Button, Container, Flex, Heading, Text, Link,useColorModeValue } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import unemployed from "../../assets/unemployed.svg";
+import { useIsAuthenticatedQuery } from "state/authApi";
 
 const Home = () => {
   const spinAnimation = {
     rotate: 360,
     transition: { duration: 2, loop: Infinity },
   };
+  const {data: isAuthenticated} = useIsAuthenticatedQuery()
+  const bgColor = useColorModeValue('gray.50', 'gray.700');
 
   return (
-    <Flex direction="column" minHeight="var(--main-container-height)">
+    <Flex direction="column" minHeight="var(--main-container-height)" bg={bgColor}>
       <Flex
         direction={{ base: "column", lg: "row" }}
         justify={{ base: "center", lg: "space-between" }}
@@ -29,11 +32,16 @@ const Home = () => {
             Let Resumize help you stand out from the crowd with a personalized
             resume and cover letter that matches the job description.
           </Text>
-          <Link as={RouterLink} to="/resumize">
+          {!isAuthenticated && <Link as={RouterLink} to="/login">
             <Button colorScheme="blue" size="lg" mr={4}>
               Get Started
             </Button>
-          </Link>
+          </Link>}
+          {isAuthenticated && <Link as={RouterLink} to="/resumize">
+            <Button colorScheme="blue" size="lg" mr={4}>
+              Get Started
+            </Button>
+          </Link>}
           <Link as={RouterLink} to="/about">
             <Button variant="outline" size="lg">
               Learn More
@@ -50,7 +58,7 @@ const Home = () => {
           />
         </Flex>
       </Flex>
-      <Flex align="center" justify="center" padding="1rem" backgroundColor="pink.400">
+      <Flex align="center" justify="center" padding="1rem" >
         <Text fontSize="lg" textAlign="center">
           © 2023 Resumize. All rights reserved.
         </Text>

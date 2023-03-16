@@ -14,7 +14,7 @@ import React from 'react'
 const ForgotPassword = () => {
 return (
     <Flex
-      minH={'100vh'}
+      minH={'var(--main-container-height)'}
       align={'center'}
       justify={'center'}
       bg={useColorModeValue('gray.50', 'gray.800')}>

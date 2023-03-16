@@ -11,7 +11,12 @@ import {
   Text,
   Button,
   VStack,
-  useColorModeValue
+  useColorModeValue,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -21,9 +26,18 @@ import { SettingsIcon } from "@chakra-ui/icons";
 import { FiSettings } from "react-icons/fi";
 import {GoFile} from "react-icons/go"
 
-import NavLink from "./Navlink";
+import NavLink from "./src/components/Navlink";
 import { useIsAuthenticatedQuery, useLogoutUserMutation, useInvalidateTags } from "state/authApi";
 import { authApi } from "state/authApi";
+
+
+const offsetModifier = {
+  name: 'offset',
+  options: {
+    offset: [0, 8], // Change the numbers to control the offset (x, y) between the popper and the reference element.
+  },
+};
+
 
 const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -32,7 +46,7 @@ const Navbar = () => {
   const {data,isLoading,error,refetch}= useIsAuthenticatedQuery()
   const btnRef = useRef(null)
   const navigate = useNavigate()
-const { invalidateTags } = authApi.util;
+// const { invalidateTags } = authApi.util;
 
   const linksLoggedOut = [
     { name: "Home", path: "/home" },
@@ -58,7 +72,7 @@ const { invalidateTags } = authApi.util;
   }
 
   const links = data ? linksLoggedIn : linksLoggedOut;
-  console.log('HERE IS LOGOUT DATA', data)
+
 return (
   <>
   {/* NAVBAR */}
@@ -84,9 +98,8 @@ return (
         size="md"
         aria-label="Open navigation"
         ref={btnRef}
-
       />
-      <HStack alignItems='center' justifyContent='flex-start' as={RouterLink} to='/contact'>
+      <HStack alignItems='center' justifyContent='flex-start' as={RouterLink} to='/home'>
         <Icon as={GoFile} boxSize='25px' position='absolute' transform={"translateX(-20px)"} />
         <Text>Resumize</Text>        
       </HStack>
@@ -96,23 +109,46 @@ return (
             {link.name}
           </NavLink>
         ))}
-        {data && <NavLink to='/login' onClick={logoutHandler}>Logout</NavLink>}
-        <IconButton
-          variant="ghost"
-          onClick={toggleColorMode}
-          icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
-          size="md"
-          aria-label="Toggle color mode"
-        />
-        <IconButton
-          variant="ghost"
-          // onClick={toggleColorMode}
-          icon={<SettingsIcon/>}
-          size="md"
-          aria-label="Setting"
-          mt="auto"
-          mx="auto"
-        />
+      <Menu popperModifiers={[offsetModifier]}>
+        <MenuButton
+          as={Button}
+          rounded={'full'}
+          variant={'link'}
+          cursor={'pointer'}
+          minW={0}
+        >
+          <Icon
+            boxSize={'0.875rem'}
+            as={SettingsIcon}
+          />
+        </MenuButton>
+        <MenuList>
+          {data &&
+          <>
+          <MenuItem as={RouterLink} to='/profile'>Profile</MenuItem>
+          <MenuItem as={RouterLink} to='/resetpassword'>Update Password</MenuItem>
+          <MenuDivider />
+          </>
+          }
+          <MenuItem onClick={toggleColorMode}>
+            <Flex alignItems="center">
+              <Icon
+                as={colorMode === "dark" ? FaSun : FaMoon}
+                boxSize="0.875rem"
+                aria-label="Toggle color mode"
+                mr={2} // Set the margin right for proper spacing
+              />
+              {colorMode === 'dark' ? "Light Mode" : "Dark Mode"}
+            </Flex>
+          </MenuItem>
+          {data &&
+          <>
+          <MenuDivider />
+          <MenuItem as={RouterLink} to='/logout' onClick={logoutHandler}>Logout</MenuItem>
+          </>
+          }
+        </MenuList>
+      </Menu>
       </HStack>
     </Flex>
 
@@ -129,36 +165,58 @@ return (
       justifyContent="flex-start"
       alignItems="center"
       // bg={useColorModeValue("white", theme.colors.purple["800"])}
-      bg={"blackAlpha.600"}
+      // bg={"blackAlpha.600"}
       pb="10"
       overflowY="auto"
       zIndex="dropdown"
+      bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <VStack>
+      <VStack >
       {links.map((link) => (
         <NavLink key={link.path} to={link.path} onClose={onClose}>
           {link.name}
         </NavLink>
       ))}
-
-      <IconButton
-        variant="ghost"
-        onClick={toggleColorMode}
-        icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
-        size="md"
-        aria-label="Toggle color mode"
-        mt="auto"
-        mx="auto"
-      />
-      <IconButton
-        variant="ghost"
-        // onClick={toggleColorMode}
-        icon={<SettingsIcon/>}
-        size="md"
-        aria-label="Setting"
-        mt="auto"
-        mx="auto"
-      />
+      <Menu popperModifiers={[offsetModifier]}>
+        <MenuButton
+          as={Button}
+          rounded={'full'}
+          variant={'link'}
+          cursor={'pointer'}
+          minW={0}
+        >
+          <Icon
+            boxSize={'0.875rem'}
+            as={SettingsIcon}
+          />
+        </MenuButton>
+        <MenuList>
+          {data &&
+          <>
+          <MenuItem as={RouterLink} to='/profile' onClick={onClose}>Profile</MenuItem>
+          <MenuItem as={RouterLink} to='/resetpassword' onClick={onClose}>Update Password</MenuItem>
+          <MenuDivider />
+          </>
+          }
+          <MenuItem onClick={() =>{toggleColorMode(); onClose();}} >
+            <Flex alignItems="center">
+              <Icon
+                as={colorMode === "dark" ? FaSun : FaMoon}
+                boxSize="0.875rem"
+                aria-label="Toggle color mode"
+                mr={2} // Set the margin right for proper spacing
+              />
+              {colorMode === 'dark' ? "Light Mode" : "Dark Mode"}
+            </Flex>
+          </MenuItem>
+          {data &&
+          <>
+          <MenuDivider />
+          <MenuItem as={RouterLink} to='/logout' onClick={() => {logoutHandler(); onClose();}}>Logout</MenuItem>
+          </>
+          }
+        </MenuList>
+      </Menu>
       </VStack>
     </Box>
   </>
@@ -166,4 +224,6 @@ return (
 };
 
 export default Navbar;
+
+
 

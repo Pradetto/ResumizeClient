@@ -45,7 +45,7 @@ const Register = () => {
             const response = await registerUser(formData).unwrap()
             console.log('User Registered:', response)
             setFormData({firstname: '', lastname: '', email: '', password: ''})
-            // navigate('/resumize')
+            navigate('/home')
         } catch(err) {
             console.error('Registration error:', err)
         }
@@ -53,7 +53,7 @@ const Register = () => {
 
   return (
 <Flex
-      minH={'100vh'}
+      minH={'var(--main-container-height)'}
       align={'center'}
       justify={'center'}
       bg={useColorModeValue('gray.50', 'gray.800')}>
@@ -62,7 +62,7 @@ const Register = () => {
           <Heading fontSize={'4xl'} textAlign={'center'}>
             Sign up
           </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
+          <Text fontSize={'lg'} color={useColorModeValue('gray.800', 'gray.400')}>
             to enjoy all of our cool features ✌️
           </Text>
         </Stack>
@@ -73,7 +73,6 @@ const Register = () => {
           p={8}
           as={'form'}
           onSubmit={handleSubmit}
-          border='5px solid red'
           >
           {passwordNotMatch && (
             <Alert status="error" mb={4}>
@@ -92,19 +91,19 @@ const Register = () => {
                 <Box>
                     <FormControl id="firstname" isRequired>
                         <FormLabel>First Name</FormLabel>
-                        <Input type="text" name="firstname" onChange={handleChange} />
+                        <Input type="text" name="firstname" onChange={handleChange} placeholder='John' _placeholder={{ color: 'gray.500' }}/>
                     </FormControl>
                 </Box>
                 <Box>
                     <FormControl id="lastname">
                         <FormLabel>Last Name</FormLabel>
-                        <Input type="text" name="lastname" onChange={handleChange} />
+                        <Input type="text" name="lastname" onChange={handleChange} placeholder='Doe' _placeholder={{ color: 'gray.500' }}/>
                     </FormControl>
                 </Box>
                 </HStack>
                 <FormControl id="email" isRequired>
                     <FormLabel>Email address</FormLabel>
-                    <Input type="email" name="email" onChange={handleChange} />
+                    <Input type="email" name="email" onChange={handleChange} placeholder='your-email@example.com' _placeholder={{ color: 'gray.500' }}/>
                 </FormControl>
                 <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>

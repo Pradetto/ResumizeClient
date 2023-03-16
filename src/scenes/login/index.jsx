@@ -40,13 +40,14 @@ const Login = () => {
       const response = await loginUser(formData).unwrap()
       console.log('Login User',response)
       setFormData({    email: "", password: "",remember: false,})
+      navigate('/home')
     } catch (err) {
       console.error("Login error:", err);
     }
   };
   return (
     <Flex
-      minH={"100vh"}
+      minH={"var(--main-container-height)"}
       align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
@@ -58,7 +59,7 @@ const Login = () => {
                 to enjoy all of our cool features ✌️
             </Text>
         </Stack>
-        <Box as='form' rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8} border='5px solid red' onSubmit={handleSubmit}>
+        <Box as='form' rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8} onSubmit={handleSubmit}>
             {error && (
             <Alert status="error" mb={4}>
                 <AlertIcon />
@@ -68,7 +69,7 @@ const Login = () => {
             <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" name="email" onChange={handleChange} />
+              <Input type="email" name="email" onChange={handleChange} placeholder='your-email@example.com' _placeholder={{ color: 'gray.500' }}/>
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
