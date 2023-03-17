@@ -1,5 +1,5 @@
-import { Box, Flex, HStack, useMediaQuery } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Flex, useMediaQuery } from '@chakra-ui/react';
+import React from 'react';
 import DocViewerContainer from './DocViewerContainer';
 import Sidebar from './Sidebar';
 import FILE from '../../assets/MP.pdf'

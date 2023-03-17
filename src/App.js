@@ -3,7 +3,6 @@ import Layout from "scenes/layout";
 import Home from "scenes/home";
 import Resumize from "scenes/resumize";
 import About from "scenes/about";
-import Logout from "scenes/about/logout";
 import Register from "scenes/register";
 import Login from "scenes/login";
 import ForgotPassword from "scenes/forgotPassword";
@@ -12,7 +11,7 @@ import { useIsAuthenticatedQuery } from "state/authApi";
 import Profile from "scenes/profile";
 
 function App() {
-  const { data: isAuthenticated, isLoading, error } = useIsAuthenticatedQuery();
+  const { data: isAuthenticated } = useIsAuthenticatedQuery();
   console.log("here is your auth status", isAuthenticated);
   return (
     <div className="App">
@@ -36,7 +35,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/resetpassword/*" element={<ResetPassword />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="/*" element={<Navigate to="/home" replace />} />
         </Route>
       </Routes>

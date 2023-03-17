@@ -14,13 +14,12 @@ import {
   useColorModeValue,
   Alert,
   AlertIcon,
-  Center
 } from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "state/authApi";
 
 const Login = () => {
-    const [loginUser, {isLoading,error, data}] = useLoginUserMutation()
+    const [loginUser, {error, data}] = useLoginUserMutation()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -39,7 +38,7 @@ const Login = () => {
     try {
       const response = await loginUser(formData).unwrap()
       console.log('Login User',response)
-      setFormData({    email: "", password: "",remember: false,})
+      setFormData({email: "", password: "",remember: false})
       navigate('/home')
     } catch (err) {
       console.error("Login error:", err);

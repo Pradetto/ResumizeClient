@@ -1,6 +1,5 @@
 import { VStack, useMediaQuery, Text,Box, HStack, Button } from "@chakra-ui/react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import { useEffect } from "react";
 // import FILE from '../../assets/MP.pdf'
 // import FILE2 from '../../assets/MP.docx'
 

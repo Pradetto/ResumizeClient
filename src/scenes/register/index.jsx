@@ -13,13 +13,12 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
   Alert,
   AlertIcon
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useRegisterUserMutation } from 'state/authApi';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const Register = () => {

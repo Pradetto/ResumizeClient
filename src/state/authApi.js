@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { nanoid } from "@reduxjs/toolkit";
 
 export const authApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -28,18 +27,38 @@ export const authApi = createApi({
       invalidatesTags: ["AuthStatus"],
     }),
     logoutUser: build.mutation({
-      query: (data) => ({
+      query: () => ({
         url: `/auth/logout`,
-
         method: "POST",
       }),
       invalidatesTags: ["User", "AuthStatus"],
     }),
     isAuthenticated: build.query({
       query: () => ({
-        url: "/auth/auth-status",
+        url: "/auth/authstatus",
       }),
       providesTags: ["AuthStatus"],
+    }),
+    resetPassword: build.mutation({
+      query: (data) => ({
+        url: `/auth/resetpassword`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updatePassword: build.mutation({
+      query: (data) => ({
+        url: `/auth/updatepassword`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    forgotPassword: build.mutation({
+      query: (data) => ({
+        url: `/auth/forgotpassword`,
+        method: "POST",
+        body: data,
+      }),
     }),
   }),
 });
@@ -49,4 +68,7 @@ export const {
   useLoginUserMutation,
   useLogoutUserMutation,
   useIsAuthenticatedQuery,
+  useResetPasswordMutation,
+  useUpdatePasswordMutation,
+  useForgotPasswordMutation,
 } = authApi;

@@ -7,11 +7,29 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  Alert,
+  AlertIcon
 } from '@chakra-ui/react';
 
-import React from 'react'
+import React, { useState } from 'react'
+import { useForgotPasswordMutation } from 'state/authApi';
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState('')
+  const [forgotPassword, {data,error}] = useForgotPasswordMutation()
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value)
+  }
+  const handleSubmit = async () =>{
+    try{
+      console.log(email)
+      await forgotPassword({email})
+      setEmail('')
+    } catch(err){
+      console.error("Forgot Password error:",err)
+    }
+  }
 return (
     <Flex
       minH={'var(--main-container-height)'}
@@ -30,6 +48,18 @@ return (
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
           Forgot your password?
         </Heading>
+        {error && (
+          <Alert status='error' mb={4}>
+          <AlertIcon />
+          {error.data.message}
+          </Alert>
+        )}
+        {data && (
+          <Alert status='success' mb={4}>
+          <AlertIcon />
+          {data.message}
+          </Alert>
+        )}
         <Text
           fontSize={{ base: 'sm', sm: 'md' }}
           color={useColorModeValue('gray.800', 'gray.400')}>
@@ -40,10 +70,13 @@ return (
             placeholder="your-email@example.com"
             _placeholder={{ color: 'gray.500' }}
             type="email"
+            value={email}
+            onChange={handleEmail}
           />
         </FormControl>
         <Stack spacing={6}>
           <Button
+          onClick={handleSubmit}
             bg={'blue.400'}
             color={'white'}
             _hover={{

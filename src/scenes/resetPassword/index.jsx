@@ -15,13 +15,16 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useIsAuthenticatedQuery } from 'state/authApi';
+import { useIsAuthenticatedQuery, useResetPasswordMutation, useUpdatePasswordMutation } from 'state/authApi';
+import { useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
-  const [formData, setFormData] = useState({ email: '', password: '', password2: '' });
+  const {token} = useParams()
+  const [formData, setFormData] = useState({ email: '', password: '', password2: '',token: token || '' });
   const [passwordNotMatch, setPasswordNotMatch] = useState('');
   const { data: isAuthenticated } = useIsAuthenticatedQuery();
-  const error = null; // get errors if the submit did not go through have to do some dynamic render for both the JWT auth or logged in auth
+  const [updatePassword,{data:updateMessage,error:updateError}] = useUpdatePasswordMutation()
+  const [resetPassword,{data:resetMessage,error:resetError}] = useResetPasswordMutation()
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -30,6 +33,7 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData)
     if (formData.password !== formData.password2) {
       setPasswordNotMatch('Passwords do not match');
       return;
@@ -37,13 +41,21 @@ const ResetPassword = () => {
       setPasswordNotMatch('');
     }
 
-    if (isAuthenticated) {
-      // USER LOGGED IN AND WANTS TO UPDATE
-    } else {
-      // THIS USER FORGOT PASSWORD EXTRACT JWT TOKEN
+    /* IF USER LOGGED IN OR OUT TRYING TO UPDATE PASSWORD */
+    try{
+      if (isAuthenticated) {
+        await updatePassword(formData).unwrap()
+        setFormData({ email: '', password: '', password2: '',token: '' })
+      } else {
+        await resetPassword(formData).unwrap()
+        setFormData({ email: '', password: '', password2: '',token: '' })
+      }
+    }catch(err){
+      console.error("Error reseting password:", err)
     }
 
-    console.log('Here is the Reset Form Data', formData);
+
+    console.log("neeed to validate reset errors work")
   };
   return (
   <Flex
@@ -76,11 +88,29 @@ const ResetPassword = () => {
           {passwordNotMatch}
         </Alert>
       )}
-      {error && (
+      {resetError && (
         <Alert status='error' mb={4}>
           <AlertIcon />
-          {error.data.message}
+          {resetError.data.message}
         </Alert>
+      )}
+      {updateError && (
+        <Alert status='error' mb={4}>
+          <AlertIcon />
+          {updateError.data.message}
+        </Alert>
+      )}
+      {updateMessage && (
+        <Alert status="success" mb={4}>
+        <AlertIcon />
+        {updateMessage.message}
+      </Alert>
+      )}
+      {resetMessage && (
+        <Alert status="success" mb={4}>
+        <AlertIcon />
+        {resetMessage.message}
+      </Alert>
       )}
       <FormControl id='email' isRequired>
         <FormLabel>Email address</FormLabel>
@@ -88,6 +118,8 @@ const ResetPassword = () => {
           placeholder='your-email@example.com'
           _placeholder={{ color: 'gray.500' }}
           type='email'
+          name='email'
+          value={formData.email}
           onChange={handleChange}
         />
       </FormControl>
@@ -97,6 +129,7 @@ const ResetPassword = () => {
           <Input
             type={showPassword ? 'text' : 'password'}
             name='password'
+            value={formData.password}
             onChange={handleChange}
           />
           <InputRightElement h={'full'}>
@@ -115,6 +148,7 @@ const ResetPassword = () => {
           <Input
             type={showPassword ? 'text' : 'password'}
             name='password2'
+            value={formData.password2} 
             onChange={handleChange}
           />
           <InputRightElement h={'full'}>
