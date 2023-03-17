@@ -15,23 +15,13 @@ import NavLink from "components/Navlink";
 import { useIsAuthenticatedQuery, useLogoutUserMutation } from "state/authApi";
 import MobileNav from "./MobileNav";
 import SettingsMenu from "./SettingsMenu";
+import useLogout from "hooks/useLogout";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [logoutUser] = useLogoutUserMutation();
   const { data: isAuthenticated } = useIsAuthenticatedQuery();
   const btnRef = useRef(null);
-  const navigate = useNavigate();
-
-  const logoutHandler = async () => {
-    try {
-      await logoutUser();
-      navigate("/home");
-      window.location.reload();
-    } catch (err) {
-      console.error("Error logging out", err);
-    }
-  };
+  const logoutHandler = useLogout()
 
   const links = isAuthenticated
     ? [

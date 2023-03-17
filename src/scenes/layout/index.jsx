@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from './navbar'
 
 const Layout = () => {
-  console.log('Clean up navbar')
+  console.log('Clean up navbar colors from purple on hover')
   return (
     <Box minHeight="100vh">
       <Navbar />

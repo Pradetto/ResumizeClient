@@ -7,16 +7,16 @@ import {
   Stack,
   Text,
   useColorModeValue,
-  Alert,
-  AlertIcon
 } from '@chakra-ui/react';
 
 import React, { useState } from 'react'
 import { useForgotPasswordMutation } from 'state/authApi';
+import useCustomToast from 'hooks/useCustomToast';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
   const [forgotPassword, {data,error}] = useForgotPasswordMutation()
+  const customToast = useCustomToast()
 
   const handleEmail = (e) => {
     setEmail(e.target.value)
@@ -26,8 +26,18 @@ const ForgotPassword = () => {
       console.log(email)
       await forgotPassword({email})
       setEmail('')
+      customToast({
+        title: 'Password reset request sent',
+        description: 'Check your email for further instructions.',
+        status: 'success',
+      });
     } catch(err){
       console.error("Forgot Password error:",err)
+      customToast({
+        title: 'Forgot Password error',
+        description: error.data.message,
+        status: 'error',
+      });
     }
   }
 return (
@@ -48,18 +58,6 @@ return (
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
           Forgot your password?
         </Heading>
-        {error && (
-          <Alert status='error' mb={4}>
-          <AlertIcon />
-          {error.data.message}
-          </Alert>
-        )}
-        {data && (
-          <Alert status='success' mb={4}>
-          <AlertIcon />
-          {data.message}
-          </Alert>
-        )}
         <Text
           fontSize={{ base: 'sm', sm: 'md' }}
           color={useColorModeValue('gray.800', 'gray.400')}>

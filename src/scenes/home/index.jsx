@@ -39,7 +39,7 @@ const Home = () => {
           </Link>}
           {isAuthenticated && <Link as={RouterLink} to="/resumize">
             <Button colorScheme="blue" size="lg" mr={4}>
-              Get Started
+              Resumize
             </Button>
           </Link>}
           <Link as={RouterLink} to="/about">

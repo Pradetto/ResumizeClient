@@ -17,6 +17,7 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useIsAuthenticatedQuery, useResetPasswordMutation, useUpdatePasswordMutation } from 'state/authApi';
 import { useParams } from 'react-router-dom';
+import useCustomToast from 'hooks/useCustomToast';
 
 const ResetPassword = () => {
   const {token} = useParams()
@@ -26,6 +27,7 @@ const ResetPassword = () => {
   const [updatePassword,{data:updateMessage,error:updateError}] = useUpdatePasswordMutation()
   const [resetPassword,{data:resetMessage,error:resetError}] = useResetPasswordMutation()
   const [showPassword, setShowPassword] = useState(false);
+  const customToast = useCustomToast()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,6 +38,11 @@ const ResetPassword = () => {
     console.log(formData)
     if (formData.password !== formData.password2) {
       setPasswordNotMatch('Passwords do not match');
+      customToast({
+        title: 'Error.',
+        description: 'Passwords do not match.',
+        status: 'error',
+      });
       return;
     } else {
       setPasswordNotMatch('');
@@ -46,12 +53,27 @@ const ResetPassword = () => {
       if (isAuthenticated) {
         await updatePassword(formData).unwrap()
         setFormData({ email: '', password: '', password2: '',token: '' })
+        customToast({
+          title: 'Password updated',
+          description: 'Your password has been updated successfully.',
+          status: 'success',
+        });
       } else {
         await resetPassword(formData).unwrap()
         setFormData({ email: '', password: '', password2: '',token: '' })
+        customToast({
+          title: 'Password reset',
+          description: 'Your password has been reset successfully.',
+          status: 'success',
+        });
       }
     }catch(err){
       console.error("Error reseting password:", err)
+      customToast({
+        title: 'Error resetting password',
+        description: isAuthenticated ? updateError.data.message : resetError.data.message,
+        status: 'error',
+      });
     }
 
 
@@ -82,36 +104,6 @@ const ResetPassword = () => {
     <Text fontSize={'lg'} color={useColorModeValue('gray.800', 'gray.400')}>
       Enter new password.
     </Text>
-      {passwordNotMatch && (
-        <Alert status='error' mb={4}>
-          <AlertIcon />
-          {passwordNotMatch}
-        </Alert>
-      )}
-      {resetError && (
-        <Alert status='error' mb={4}>
-          <AlertIcon />
-          {resetError.data.message}
-        </Alert>
-      )}
-      {updateError && (
-        <Alert status='error' mb={4}>
-          <AlertIcon />
-          {updateError.data.message}
-        </Alert>
-      )}
-      {updateMessage && (
-        <Alert status="success" mb={4}>
-        <AlertIcon />
-        {updateMessage.message}
-      </Alert>
-      )}
-      {resetMessage && (
-        <Alert status="success" mb={4}>
-        <AlertIcon />
-        {resetMessage.message}
-      </Alert>
-      )}
       <FormControl id='email' isRequired>
         <FormLabel>Email address</FormLabel>
         <Input

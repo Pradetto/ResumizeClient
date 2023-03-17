@@ -13,19 +13,24 @@ import {
   Text,
   useColorModeValue,
   Alert,
-  AlertIcon,
+  AlertIcon
 } from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useLoginUserMutation } from "state/authApi";
+import { useIsAuthenticatedQuery, useLoginUserMutation } from "state/authApi";
+import useCustomToast from "hooks/useCustomToast";
+import useLogout from "hooks/useLogout";
 
 const Login = () => {
-    const [loginUser, {error, data}] = useLoginUserMutation()
+  const [loginUser, {error, data}] = useLoginUserMutation()
+  const {data: isAuthenticated} = useIsAuthenticatedQuery()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     remember: false,
   });
   const navigate = useNavigate()
+  const customToast = useCustomToast();
+  const logoutHandler = useLogout()
 
   const handleChange = (e) => {
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -40,8 +45,19 @@ const Login = () => {
       console.log('Login User',response)
       setFormData({email: "", password: "",remember: false})
       navigate('/home')
+
+      customToast({
+      title: "Logged in",
+      description: "You have successfully logged in.",
+      status: "success",
+      });
     } catch (err) {
       console.error("Login error:", err);
+      customToast({
+      title: "Login error",
+      description: `${error.data.message}`,
+      status: "error",
+      });
     }
   };
   return (
@@ -59,12 +75,6 @@ const Login = () => {
             </Text>
         </Stack>
         <Box as='form' rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8} onSubmit={handleSubmit}>
-            {error && (
-            <Alert status="error" mb={4}>
-                <AlertIcon />
-                {error.data.message}
-            </Alert>
-            )}
             <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
@@ -92,10 +102,23 @@ const Login = () => {
                 _hover={{
                   bg: "blue.500",
                 }}
-                isDisabled={data}
+                isDisabled={isAuthenticated}
               >
                 Sign in
               </Button>
+              {isAuthenticated && (
+                <Alert status="warning">
+                  <AlertIcon />
+                  Seems you are already signed in.&nbsp;
+                  <Button
+                    variant="link"
+                    colorScheme="blue"
+                    onClick={logoutHandler}
+                  >
+                    Logout
+                  </Button>
+                </Alert>
+              )}
             </Stack>
                 <Stack pt={6}>
                 <Text align={'center'}>
