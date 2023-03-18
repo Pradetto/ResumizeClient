@@ -10,7 +10,7 @@ export const generalApi = createApi({
   endpoints: (build) => ({
     contactInfo: build.query({
       query: () => ({
-        url: `/general/contactinfo`,
+        url: `/general/profileinfo`,
         method: "GET",
       }),
       providesTags: ["ContactInfo"],

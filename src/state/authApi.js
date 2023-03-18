@@ -33,6 +33,13 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["User", "AuthStatus"],
     }),
+    deleteProfile: build.mutation({
+      query: () => ({
+        url: `/auth/deleteprofile`,
+        method: "POST",
+      }),
+      invalidatesTags: ["User", "AuthStatus"],
+    }),
     isAuthenticated: build.query({
       query: () => ({
         url: "/auth/authstatus",
@@ -70,5 +77,6 @@ export const {
   useIsAuthenticatedQuery,
   useResetPasswordMutation,
   useUpdatePasswordMutation,
+  useDeleteProfileMutation,
   useForgotPasswordMutation,
 } = authApi;

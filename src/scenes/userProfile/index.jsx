@@ -3,10 +3,8 @@ import {
   VStack,
   Text,
   useColorModeValue,
-  Button,
   Avatar,
   Stack,
-  HStack,
   Link,
   Icon,
 } from "@chakra-ui/react";
@@ -17,6 +15,7 @@ import UserDataField from "./UserDataField";
 import { useMemo } from "react";
 import Error from "components/Error";
 import Loading from "components/Loading";
+import DeleteProfileModal from "./DeleteProfileModal";
 
 const UserProfile = () => {
   const bg = useColorModeValue("white", "gray.800");
@@ -103,9 +102,7 @@ const UserProfile = () => {
           })}
         </Stack>
 
-        <Button colorScheme="red" onClick={() => alert("Profile deleted")}>
-          Delete Profile
-        </Button>
+        <DeleteProfileModal />
       </VStack>
     </Container>
   );

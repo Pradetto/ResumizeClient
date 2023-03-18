@@ -15,6 +15,7 @@ const UserInfo = ({handleChange,setIsValidUserInfo,formData}) => {
         "lastname",
         "phone",
         "street",
+        "city",
         "state",
         "postalCode",
         "country",
@@ -80,7 +81,7 @@ const UserInfo = ({handleChange,setIsValidUserInfo,formData}) => {
         value={formData.street}
     />
     </FormControl>
-            <HStack>
+    <HStack>
     <FormControl id="apt">
         <FormLabel>Apt/Unit</FormLabel>
         <Input
@@ -92,17 +93,30 @@ const UserInfo = ({handleChange,setIsValidUserInfo,formData}) => {
         value={formData.apt}
         />
     </FormControl>
+    <FormControl id="city" isRequired>
+        <FormLabel>City</FormLabel>
+        <Input
+        type="text"
+        name="city"
+        onChange={checkFormValidity}
+        placeholder="Austin"
+        _placeholder={{ color: 'gray.500' }}
+        value={formData.city}
+        />
+    </FormControl>
     <FormControl id="state" isRequired>
         <FormLabel>State</FormLabel>
         <Input
         type="text"
         name="state"
         onChange={checkFormValidity}
-        placeholder="CA"
+        placeholder="TX"
         _placeholder={{ color: 'gray.500' }}
         value={formData.state}
         />
     </FormControl>
+    </HStack>
+    <HStack>
     <FormControl id="postalCode" isRequired>
     <FormLabel>Zip</FormLabel>
         <Input
@@ -114,8 +128,7 @@ const UserInfo = ({handleChange,setIsValidUserInfo,formData}) => {
         value={formData.postalCode}
         />
     </FormControl>
-    </HStack>
-            <FormControl id="country" isRequired>
+    <FormControl id="country" isRequired>
     <FormLabel>Country</FormLabel>
     <Input
         type="text"
@@ -126,6 +139,7 @@ const UserInfo = ({handleChange,setIsValidUserInfo,formData}) => {
         value={formData.country}
     />
     </FormControl>
+    </HStack>
     </>
   )
 }
