@@ -12,7 +12,7 @@ const DocViewerContainer = ({file,title}) => {
     return (
         <VStack>
             <Text as='h2' fontSize='3xl'>{title}</Text>
-            <Box border="5px solid black">
+            <Box border="5px solid black" rounded='1%'>
                 <DocViewer
                     pluginRenderers={DocViewerRenderers}
                     documents={docs}
@@ -34,8 +34,8 @@ const DocViewerContainer = ({file,title}) => {
                 />
             </Box>
             <HStack>
+                <Text>Quick Actions:</Text>
                 <Button>Reroll</Button>
-                <Button>Edit</Button>
                 <Button>Save</Button>
             </HStack>
         </VStack>

@@ -16,7 +16,13 @@ export const generalApi = createApi({
       providesTags: ["ContactInfo"],
       //   invalidatesTags: ["AuthStatus"],
     }),
+    uploadFile: build.mutation({
+      query: () => ({
+        url: `general/upload`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const { useContactInfoQuery } = generalApi;
+export const { useContactInfoQuery, useUploadFileMutation } = generalApi;
