@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState, useEffect} from 'react'
 import { useUploadFileMutation } from 'state/generalApi';
 
 const useResumeUpload = () => {
@@ -9,6 +9,7 @@ const useResumeUpload = () => {
     const [isDefault,setIsDefault] = useState(false)
     const [uploadeResumedFile, setUploadedResumeFile] = useState(null)
     const [selectedResumeFile,setSelectedResumeFile] = useState('')
+    const [showUpload, setShowUpload] = useState(true);
 
     const handleResumeChange = (e) => {
         if (e.target.type === 'file') {
@@ -18,15 +19,14 @@ const useResumeUpload = () => {
         }
     };
 
-    console.log(uploadeResumedFile)
-
+    useEffect(() => {
     const handleResumeUpload = async () => {
         if (!uploadeResumedFile) return;
 
         try {
             const formData = new FormData()
             formData.append("file",uploadeResumedFile)
-
+            console.log('here is form data',formData)
             const result = await uploadFile(formData).unwrap()
 
             if (result.url) {
@@ -38,6 +38,15 @@ const useResumeUpload = () => {
             setResumeUploadStatus("Error uploading file" + err.message)
         }
     }
+
+    if (uploadeResumedFile){
+        handleResumeUpload()
+    }
+    },[uploadeResumedFile, uploadFile])
+
+
+
+
   return (
     [
     uploadeResumedFile,
@@ -46,9 +55,10 @@ const useResumeUpload = () => {
     setSelectedResumeFile,
     resumeUploadStatus,
     handleResumeChange,
-    handleResumeUpload,
     isDefault,
     setIsDefault,
+    showUpload,
+    setShowUpload
     ]
   )
 }

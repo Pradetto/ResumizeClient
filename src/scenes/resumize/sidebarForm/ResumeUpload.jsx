@@ -5,13 +5,13 @@ const ResumeUpload = ({
   uploadedResumeFile,
   setUploadedResumeFile,
   handleResumeChange,
-  handleResumeUpload,
   isDefault,
   setIsDefault,
   selectedResumeFile,
   setSelectedResumeFile,
+  showUpload,
+  setShowUpload
 }) => {
-  const [showUpload, setShowUpload] = useState(true);
 
   return (
     <>

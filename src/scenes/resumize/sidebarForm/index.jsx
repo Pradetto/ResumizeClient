@@ -25,7 +25,7 @@ import useResumeUpload from 'hooks/useResumeUpload';
 
 
 const SidebarForm = () => {
-  const [uploadeResumedFile, setUploadedResumeFile, selectedResumeFile, setSelectedResumeFile,resumeUploadStatus,handleResumeChange,handleResumeUpload,isDefault,setIsDefault] = useResumeUpload()
+  const [uploadeResumedFile, setUploadedResumeFile, selectedResumeFile, setSelectedResumeFile,resumeUploadStatus,handleResumeChange,isDefault,setIsDefault, showUpload,setShowUpload] = useResumeUpload()
 
   /* OLD SETUP */
   
@@ -216,9 +216,10 @@ const handleCompanyChange = (option) => {
               selectedResumeFile={selectedResumeFile} 
               setSelectedResumeFile={setSelectedResumeFile} setUploadedResumeFile={setUploadedResumeFile} 
               handleResumeChange={handleResumeChange} 
-              handleResumeUpload={handleResumeUpload}
               isDefault={isDefault}
               setIsDefault={setIsDefault}
+              showUpload={showUpload}
+              setShowUpload={setShowUpload}
               />
               <JobInfo />
 
