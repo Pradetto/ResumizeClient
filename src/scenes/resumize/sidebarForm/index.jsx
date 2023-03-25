@@ -12,6 +12,7 @@ import {
   HStack,
   useDisclosure,
   useMediaQuery,
+  Center,
 } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
@@ -19,10 +20,15 @@ import ResumeUpload from './ResumeUpload';
 import JobInfo from './JobInfo';
 import HiringManagerInfo from './HiringManagerInfo';
 import CoverLetter from './CoverLetter';
+import { useUploadFileMutation } from 'state/generalApi';
+import useResumeUpload from 'hooks/useResumeUpload';
 
 
 const SidebarForm = () => {
-  const [resumeFile, setResumeFile] = useState('');
+  const [uploadeResumedFile, setUploadedResumeFile, selectedResumeFile, setSelectedResumeFile,resumeUploadStatus,handleResumeChange,handleResumeUpload,isDefault,setIsDefault] = useResumeUpload()
+
+  /* OLD SETUP */
+  
   const [selectedFile, setSelectedFile] = useState('');
   const [jobUrl, setJobUrl] = useState('');
   const [jobDescription, setJobDescription] = useState('');
@@ -131,9 +137,7 @@ const handleCompanyChange = (option) => {
   };
 
 
-  const handleResumeFileChange = (event) => {
-    setResumeFile(event.target.value);
-  };
+
 
   const handleSelectedFileChange = (event) => {
     setSelectedFile(event.target.value);
@@ -207,7 +211,15 @@ const handleCompanyChange = (option) => {
           <DrawerBody>
             <Box as="form" onSubmit={handleSubmit}>
               {/* COMPONENTS */}
-              <ResumeUpload />
+              <ResumeUpload 
+              uploadeResumedFile={uploadeResumedFile} 
+              selectedResumeFile={selectedResumeFile} 
+              setSelectedResumeFile={setSelectedResumeFile} setUploadedResumeFile={setUploadedResumeFile} 
+              handleResumeChange={handleResumeChange} 
+              handleResumeUpload={handleResumeUpload}
+              isDefault={isDefault}
+              setIsDefault={setIsDefault}
+              />
               <JobInfo />
 
               <HStack gap={4} marginBottom="20px">
@@ -217,16 +229,17 @@ const handleCompanyChange = (option) => {
                 >
                   {showOptionalFields ? 'Hide' : 'Show'} Optional Fields
                 </Button>
-                <Button colorScheme="red" marginLeft="10px" onClick={resetSelection}>
-                  Reset
+                <Button colorScheme="yellow" marginLeft="10px" onClick={resetSelection}>
+                  Reset Filters
                 </Button>
               </HStack>
 
               {showOptionalFields && <HiringManagerInfo />}
               {/* RESUME STUFF CAN GO HERE */}
               <CoverLetter />
+              
               <DrawerFooter>
-                <Button type="submit">Submit</Button>
+                <Button type="submit" colorScheme='green'>Submit</Button>
               </DrawerFooter>
             </Box>
           </DrawerBody>
