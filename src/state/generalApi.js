@@ -6,7 +6,7 @@ export const generalApi = createApi({
     credentials: "include",
   }),
   reducerPath: "generalApi",
-  tagTypes: ["ContactInfo"],
+  tagTypes: ["ContactInfo", "ResumeList", "UploadFile"],
   endpoints: (build) => ({
     contactInfo: build.query({
       query: () => ({
@@ -16,13 +16,27 @@ export const generalApi = createApi({
       providesTags: ["ContactInfo"],
       //   invalidatesTags: ["AuthStatus"],
     }),
-    uploadFile: build.mutation({
+    getResumeList: build.query({
       query: () => ({
+        url: `/general/resumes`,
+        method: "GET",
+      }),
+      providesTags: ["ResumeList"],
+      invalidatesTags: ["UploadFile"],
+    }),
+    uploadFile: build.mutation({
+      query: (file) => ({
         url: `/general/upload`,
         method: "POST",
+        body: file,
       }),
+      providesTags: ["UploadFile"],
     }),
   }),
 });
 
-export const { useContactInfoQuery, useUploadFileMutation } = generalApi;
+export const {
+  useContactInfoQuery,
+  useUploadFileMutation,
+  useGetResumeListQuery,
+} = generalApi;

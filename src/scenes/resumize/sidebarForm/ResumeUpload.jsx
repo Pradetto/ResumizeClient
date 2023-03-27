@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Box, Button, FormControl, FormLabel, Input, Select, HStack, Checkbox } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Input, Select, HStack, Checkbox } from "@chakra-ui/react";
+import { useGetResumeListQuery, useUploadFileMutation } from "state/generalApi";
 
 const ResumeUpload = ({
   uploadedResumeFile,
@@ -12,7 +12,8 @@ const ResumeUpload = ({
   showUpload,
   setShowUpload
 }) => {
-
+  const {error: uploadError,isLoading:uploadIsLoading, data:uploadIsSuccess} = useUploadFileMutation()
+  const {data:resumeListData} = useGetResumeListQuery()
   return (
     <>
       <Button
@@ -20,8 +21,8 @@ const ResumeUpload = ({
         onClick={() => {
           setShowUpload(!showUpload);
           setUploadedResumeFile(null);
-          setSelectedResumeFile('');
-          setIsDefault(false);
+          // setSelectedResumeFile('');
+          // setIsDefault(false);
         }}
       >
         {showUpload ? "Select Existing Resume" : "Upload New Resume"}
@@ -53,9 +54,14 @@ const ResumeUpload = ({
               onChange={handleResumeChange}
             >
               <option value="">--Select--</option>
-              <option value="resume1">Resume 1</option>
-              <option value="resume2">Resume 2</option>
-              <option value="resume3">Resume 3</option>
+              {resumeListData.map((resume) => {
+                return (
+                  <option
+                    key={resume.id}
+                    value={resume.file_key}
+                  >{resume.file_name}</option>
+                )
+              })}
             </Select>
             <Checkbox
               isChecked={isDefault}
