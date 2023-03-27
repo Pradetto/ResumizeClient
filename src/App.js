@@ -13,6 +13,7 @@ import UserProfile from "scenes/userProfile";
 function App() {
   const { data: isAuthenticated } = useIsAuthenticatedQuery();
   console.log("here is your auth status", isAuthenticated);
+  console.log("testing");
   return (
     <div className="App">
       <Routes>
