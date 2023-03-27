@@ -25,7 +25,7 @@ import useResumeUpload from 'hooks/useResumeUpload';
 
 
 const SidebarForm = () => {
-  const [uploadeResumedFile, setUploadedResumeFile, selectedResumeFile, setSelectedResumeFile,handleResumeChange,isDefault,setIsDefault, showUpload,setShowUpload] = useResumeUpload()
+  const [selectedResumeFile, setSelectedResumeFile,handleResumeChange,isDefault,setIsDefault, showUpload,setShowUpload] = useResumeUpload()
 
   /* OLD SETUP */
   
@@ -160,7 +160,7 @@ const handleCompanyChange = (option) => {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     // handle form submission logic here
   };
 
@@ -212,10 +212,8 @@ const handleCompanyChange = (option) => {
             <Box as="form" onSubmit={handleSubmit}>
               {/* COMPONENTS */}
               <ResumeUpload 
-              uploadeResumedFile={uploadeResumedFile} 
               selectedResumeFile={selectedResumeFile} 
               setSelectedResumeFile={setSelectedResumeFile} 
-              setUploadedResumeFile={setUploadedResumeFile} 
               handleResumeChange={handleResumeChange} 
               isDefault={isDefault}
               setIsDefault={setIsDefault}

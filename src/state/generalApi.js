@@ -31,6 +31,7 @@ export const generalApi = createApi({
         body: file,
       }),
       providesTags: ["UploadFile"],
+      invalidatesTags: ["ResumeList"],
     }),
   }),
 });
