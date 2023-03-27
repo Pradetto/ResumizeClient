@@ -6,35 +6,61 @@ const useResumeUpload = () => {
     /* RESUME STATE */
     const [uploadFile] = useUploadFileMutation();
     const {data:resumeListData} = useGetResumeListQuery()
-    const [isDefault,setIsDefault] = useState(false)
-    const [selectedResumeFile,setSelectedResumeFile] = useState('')
     const [showUpload, setShowUpload] = useState(true);
+    const [selectedResumeData, setSelectedResumeData] = useState({
+        id:'',
+        user_id:'',
+        file_key:'',
+        is_default: false
+    })
     const customToast = useCustomToast()
 
     useEffect(() => {
         const defaultResume = resumeListData?.find((resume) => resume.is_default === true);
         if (defaultResume) {
-            setSelectedResumeFile(defaultResume.file_key);
-            setIsDefault(true)
+            setSelectedResumeData({
+            id: defaultResume.id,
+            user_id: defaultResume.user_id,
+            file_key: defaultResume.file_key,
+            is_default: defaultResume.is_default,
+            });
         }
     }, [resumeListData]);
 
-    const handleResumeChange = (e) => {
-        if (e.target.type === 'file') {
-            handleResumeUpload(e.target.files[0])
-        } else if (e.target.type === 'select-one') {
-            setSelectedResumeFile(e.target.value);
-        }
+    // useEffect(() => {
+    //     const selectedResume = resumeListData?.find((resume) => resume.file_key === selectedResumeFile);
+    //     if (selectedResume) {
+    //         setIsDefault(selectedResume.is_default);
+    //     }
+    // }, [selectedResumeFile, resumeListData]);
+
+
+    const handleResumeSelect = (e) => {
+    if (e.target.type === 'select-one') {
+        const newSelectedResume = e.target.value
+        const resume = resumeListData?.find((resume) => resume.file_key === newSelectedResume);
+        setSelectedResumeData({
+        id: resume.id,
+        user_id: resume.user_id,
+        file_key: resume.file_key,
+        is_default: resume.is_default
+        });
+    }
     };
 
-    // useEffect(() => {
+    const handleFileInputChange = (e) => {
+    if (e.target.type === 'file') {
+        handleResumeUpload(e.target.files[0]);
+    }
+    };
+
     const handleResumeUpload = async (uploadResumedFile) => {
         if (!uploadResumedFile) return;
 
         try {
             const formData = new FormData()
             formData.append("file",uploadResumedFile)
-            formData.append("isDefault",isDefault)
+            formData.append("isDefault",  selectedResumeData.is_default ? '1' : '0')
             await uploadFile(formData).unwrap()
             customToast({
             title: "Succesful resume upload",
@@ -54,13 +80,12 @@ const useResumeUpload = () => {
 
   return (
     [
-    selectedResumeFile,
-    setSelectedResumeFile,
-    handleResumeChange,
-    isDefault,
-    setIsDefault,
     showUpload,
-    setShowUpload
+    setShowUpload,
+    handleFileInputChange,
+    handleResumeSelect,
+    selectedResumeData,
+    setSelectedResumeData
     ]
   )
 }

@@ -33,6 +33,13 @@ export const generalApi = createApi({
       providesTags: ["UploadFile"],
       invalidatesTags: ["ResumeList"],
     }),
+    uploadForm: build.mutation({
+      query: (data) => ({
+        url: `/general/form`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -40,4 +47,5 @@ export const {
   useContactInfoQuery,
   useUploadFileMutation,
   useGetResumeListQuery,
+  useUploadFormMutation,
 } = generalApi;

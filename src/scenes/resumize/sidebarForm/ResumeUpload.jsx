@@ -2,24 +2,26 @@ import { Button, FormControl, FormLabel, Input, Select, HStack, Checkbox } from 
 import { useGetResumeListQuery } from "state/generalApi";
 
 const ResumeUpload = ({
-  handleResumeChange,
-  isDefault,
-  setIsDefault,
-  selectedResumeFile,
-  setSelectedResumeFile,
   showUpload,
-  setShowUpload
+  setShowUpload,
+  handleFileInputChange,
+  handleResumeSelect,
+  selectedResumeData,
+  setSelectedResumeData
 }) => {
   const {data:resumeListData} = useGetResumeListQuery()
-
   return (
     <>
       <Button
         mb={3}
         onClick={() => {
           setShowUpload(!showUpload);
-          setSelectedResumeFile('');
-          setIsDefault(false);
+          setSelectedResumeData({
+            id:'',
+            user_id:'',
+            file_key:'',
+            is_default: false
+          })
         }}
       >
         {showUpload ? "Upload New Resume":"Select Existing Resume"}
@@ -30,8 +32,8 @@ const ResumeUpload = ({
           <HStack>
             <Select
               id="selected-file"
-              value={selectedResumeFile}
-              onChange={handleResumeChange}
+              value={selectedResumeData.file_key}
+              onChange={handleResumeSelect}
             >
               <option value="">--Select--</option>
               {resumeListData?.map((resume) => {
@@ -44,8 +46,8 @@ const ResumeUpload = ({
               })}
             </Select>
               <Checkbox
-                isChecked={isDefault}
-                onChange={() => setIsDefault(!isDefault)}
+                isChecked={selectedResumeData.is_default}
+                onChange={() => setSelectedResumeData({...selectedResumeData, is_default: !selectedResumeData.is_default})}
               >
                 Set as default
               </Checkbox>
@@ -58,12 +60,12 @@ const ResumeUpload = ({
             <Input
               type="file"
               id="resume-file"
-              onChange={handleResumeChange}
+              onChange={handleFileInputChange}
             />
           </FormControl>
           <Checkbox
-            isChecked={isDefault}
-            onChange={() => setIsDefault(!isDefault)}
+            isChecked={selectedResumeData.is_default}
+            onChange={() => setSelectedResumeData({...selectedResumeData, is_default: !selectedResumeData.is_default})}
           >
             Set as default
           </Checkbox>

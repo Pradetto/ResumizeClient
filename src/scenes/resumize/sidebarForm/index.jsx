@@ -20,12 +20,21 @@ import ResumeUpload from './ResumeUpload';
 import JobInfo from './JobInfo';
 import HiringManagerInfo from './HiringManagerInfo';
 import CoverLetter from './CoverLetter';
-import { useUploadFileMutation } from 'state/generalApi';
 import useResumeUpload from 'hooks/useResumeUpload';
+import { useUploadFormMutation } from 'state/generalApi';
 
 
 const SidebarForm = () => {
-  const [selectedResumeFile, setSelectedResumeFile,handleResumeChange,isDefault,setIsDefault, showUpload,setShowUpload] = useResumeUpload()
+const [
+  showUpload,
+  setShowUpload,
+  handleFileInputChange,
+  handleResumeSelect,
+  selectedResumeData,
+  setSelectedResumeData
+] = useResumeUpload();
+
+  const [uploadForm] = useUploadFormMutation()
 
   /* OLD SETUP */
   
@@ -159,8 +168,20 @@ const handleCompanyChange = (option) => {
     setCoverLetterText(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    // event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    
+    let data = {}
+    // console.log(selectedResumeFile)
+    // const resume_id = selectedResumeFile.split('/')[0]
+    // console.log(resume_id)
+    data = {resume: {...selectedResumeData}}
+
+    try {
+      await uploadForm(data)
+    } catch (err){
+      console.error(err.message)
+    }
     // handle form submission logic here
   };
 
@@ -212,13 +233,12 @@ const handleCompanyChange = (option) => {
             <Box as="form" onSubmit={handleSubmit}>
               {/* COMPONENTS */}
               <ResumeUpload 
-              selectedResumeFile={selectedResumeFile} 
-              setSelectedResumeFile={setSelectedResumeFile} 
-              handleResumeChange={handleResumeChange} 
-              isDefault={isDefault}
-              setIsDefault={setIsDefault}
+              selectedResumeData={selectedResumeData}
+              setSelectedResumeData={setSelectedResumeData}
               showUpload={showUpload}
               setShowUpload={setShowUpload}
+              handleFileInputChange={handleFileInputChange}
+              handleResumeSelect={handleResumeSelect}
               />
               <JobInfo />
 
