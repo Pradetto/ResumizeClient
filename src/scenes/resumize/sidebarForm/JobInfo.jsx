@@ -13,7 +13,8 @@ const JobInfo = ({
   handleSelectedCompany,
   selectedJob,
   setSelectedJob,
-  handleSelectedJob
+  handleSelectedJob,
+  handleSelectedJobChange
 }) => {
   const {data: companiesListData} = useGetCompaniesListQuery()
   const [insertCompany] = useInsertCompanyMutation()
@@ -36,7 +37,7 @@ return (
         onChange={(option) => handleSelectedCompany(option)}
         onCreateOption={async (newCompanyName) => {
           const res = await insertCompany({ company_name: newCompanyName });
-          setSelectedCompany({ id: res.data.id, company_name: res.data.company_name });
+          setSelectedCompany({ id: res.data.id, company_name: res.data.company_name, link: '', description: '' });
         }}
         options={
           companiesListData?.map((company) => ({
@@ -48,8 +49,16 @@ return (
         required
       />
     </FormTitle>
+    
     {selectedCompany.id !== '' &&
-    <FormTitle htmlFor="role" isRequired={true} text="Role" tooltipLabel="This is the job title you are applying too.">
+    <FormTitle htmlFor="link" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. If you do have an exisitng one please edit that.">
+      <Input type='text' id='link' name='link' value={selectedJob.link} onChange={handleSelectedJobChange} placeholder={jobUrlPlaceholder}/>
+    </FormTitle>
+    }
+
+    {selectedJob.link && (
+      <>
+      <FormTitle htmlFor="role" isRequired={true} text="Role" tooltipLabel="This is the job title you are applying too.">
       <CreatableSelect
         id="role"
         value={
@@ -81,10 +90,6 @@ return (
         required
       />
     </FormTitle>
-    }
-    <FormTitle htmlFor="job-url" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. If you do have an exisitng one please edit that.">
-      {/* <Input type='text' id='job-url' value={jobUrl} onChange={handleJobUrl} placeholder={jobUrlPlaceholder}/> */}
-    </FormTitle>
     <FormTitle htmlFor="job-description" isRequired={true} text="Paste Job Description" tooltipLabel="The more text the more you use of your tokens. Please try to cut out as much fluff from your job description. The AI is smart enough to reduce the original text from the post to highlight key points to save you tokens on future edits and rerolls.">
       <Textarea
         id="job-description"
@@ -93,6 +98,8 @@ return (
         // onChange={handleJobDescriptionChange}
       />
     </FormTitle>
+    </>
+    )}
   </>
 )
 }

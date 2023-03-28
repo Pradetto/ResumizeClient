@@ -41,7 +41,8 @@ const [
   handleSelectedCompany,
   selectedJob,
   setSelectedJob,
-  handleSelectedJob
+  handleSelectedJob,
+  handleSelectedJobChange
 ] = useJobInfo()
   const customToast = useCustomToast()
   const [uploadForm] = useUploadFormMutation()
@@ -87,11 +88,19 @@ const handleHiringManagerChange = (option) => {
     console.log('called 1')
 
     if (selectedCompany.id === '' || selectedCompany.company_name === ''){
-      console.log('called')
-        console.error("Selected Company error error:");
+        console.error("Selected Company error:");
         customToast({
         title: "Selected Company Error:",
         description: `Please make sure you have selected a company.`,
+        status: "error",
+      });
+      return
+    }
+    if (selectedJob.id === '' || selectedJob.company_id === '' || selectedJob.role === '' || selectedJob.link === '' || selectedJob.description ===''){
+        console.error("Job Info error:");
+        customToast({
+        title: "Job Info Error:",
+        description: `Please make sure you have completed the Job role, link and description.`,
         status: "error",
       });
       return
@@ -173,6 +182,7 @@ const handleHiringManagerChange = (option) => {
               selectedJob={selectedJob}
               setSelectedJob={setSelectedJob}
               handleSelectedJob={handleSelectedJob}
+              handleSelectedJobChange={handleSelectedJobChange}
               />
 
               <HStack gap={4} marginBottom="20px">

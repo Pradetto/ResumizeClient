@@ -6,20 +6,25 @@ const useJobInfo = () => {
   const [selectedJob, setSelectedJob] = useState({id:'',company_id:'',role:'',link:'',description:''})
   const {data} = useGetJobsListQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
 
-  const clearFilters = () => {
+  const clearJobFilters = () => {
     setSelectedCompany({id: '',company_name:''})
     setSelectedJob({id:'',company_id:'',role:'',link:'',description:''})
   }
 
   const handleSelectedCompany = (option) => {
-    clearFilters()
+    clearJobFilters()
     setSelectedCompany({id:option.value,company_name:option.label})
   }
 
   const handleSelectedJob = (option) => {
     const job = data.find((job) => job.id === option.value);
+    console.log(job)
     setSelectedJob(job);
   };
+
+  const handleSelectedJobChange = (e) => {
+    setSelectedJob({...selectedJob, [e.target.name]: e.target.value})
+  }
 
   return (
     [
@@ -28,7 +33,8 @@ const useJobInfo = () => {
       handleSelectedCompany,
       selectedJob,
       setSelectedJob,
-      handleSelectedJob
+      handleSelectedJob,
+      handleSelectedJobChange
     ]
   )
 }
