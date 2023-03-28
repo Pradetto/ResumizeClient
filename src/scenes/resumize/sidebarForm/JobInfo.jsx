@@ -5,52 +5,92 @@ import {
 } from '@chakra-ui/react';
 import CreatableSelect from 'react-select/creatable';
 import FormTitle from 'components/FormTitle';
+import { useCreateRoleMutation, useGetCompaniesListQuery, useGetJobsListQuery, useInsertCompanyMutation } from 'state/formApi';
 
-const JobInfo = ({selectedCompany,fetchedCompanies,handleCompanyChange,subformData,handleRoleChange,filteredRoles,jobUrl,handleJobUrl,jobDescription,handleJobDescriptionChange}) => {
+const JobInfo = ({
+  selectedCompany,
+  setSelectedCompany,
+  handleSelectedCompany,
+  selectedJob,
+  setSelectedJob,
+  handleSelectedJob
+}) => {
+  const {data: companiesListData} = useGetCompaniesListQuery()
+  const [insertCompany] = useInsertCompanyMutation()
+
+  const {data: jobsListData} = useGetJobsListQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
+  const [createRole] = useCreateRoleMutation()
 return (
   <>
     <FormTitle htmlFor="company" isRequired={true} text="Company">
       <CreatableSelect
         id="company"
-        // value={
-        //   selectedCompany
-        //     ? {
-        //         value: selectedCompany,
-        //         label: fetchedCompanies.find(
-        //           (company) => company.id === parseInt(selectedCompany)
-        //         ).name,
-        //       }
-        //     : null
-        // }
-        onChange={(option) => handleCompanyChange(option)}
-        // options={fetchedCompanies.map((company) => ({
-        //   value: company.id,
-        //   label: company.name,
-        // }))}
+        value={
+          selectedCompany.id && selectedCompany.company_name
+            ? {
+                value: selectedCompany.id,
+                label: selectedCompany.company_name,
+              }
+            : null
+        }
+        onChange={(option) => handleSelectedCompany(option)}
+        onCreateOption={async (newCompanyName) => {
+          const res = await insertCompany({ company_name: newCompanyName });
+          setSelectedCompany({ id: res.data.id, company_name: res.data.company_name });
+        }}
+        options={
+          companiesListData?.map((company) => ({
+            value: company.id,
+            label: company.company_name,
+          })) || []
+        }
         placeholder="Select or type to create..."
+        required
       />
     </FormTitle>
+    {selectedCompany.id !== '' &&
     <FormTitle htmlFor="role" isRequired={true} text="Role" tooltipLabel="This is the job title you are applying too.">
       <CreatableSelect
         id="role"
-        // value={subformData.role ? { label: subformData.role } : null}
-        onChange={handleRoleChange}
-        // options={filteredRoles.map((role) => ({
-        //   value: role.name,
-        //   label: role.name,
-        // }))}
+        value={
+          selectedJob.id && selectedJob.role
+            ? {
+                value: selectedJob.id,
+                label: selectedJob.role,
+              }
+            : null
+        }
+        onChange={(option) => handleSelectedJob(option)}
+        onCreateOption={async (newRole) => {
+          const res = await createRole({ company_id: selectedCompany.id, role_name:newRole });
+          console.log(res)
+          setSelectedJob((prevData) => ({
+              ...prevData,
+              id:res.data.id,
+              company_id:res.data.company_id,
+              role:res.data.role
+          }));
+        }}
+        options={
+          jobsListData?.map((job) => ({
+            value: job.id,
+            label: job.role,
+          })) || []
+        }
         placeholder="Select or type to create..."
+        required
       />
     </FormTitle>
+    }
     <FormTitle htmlFor="job-url" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. If you do have an exisitng one please edit that.">
-      <Input type='text' id='job-url' value={jobUrl} onChange={handleJobUrl} placeholder={jobUrlPlaceholder}/>
+      {/* <Input type='text' id='job-url' value={jobUrl} onChange={handleJobUrl} placeholder={jobUrlPlaceholder}/> */}
     </FormTitle>
     <FormTitle htmlFor="job-description" isRequired={true} text="Paste Job Description" tooltipLabel="The more text the more you use of your tokens. Please try to cut out as much fluff from your job description. The AI is smart enough to reduce the original text from the post to highlight key points to save you tokens on future edits and rerolls.">
       <Textarea
         id="job-description"
         // value={jobDescription}
         placeholder={jobDescriptionPlaceholder}
-        onChange={handleJobDescriptionChange}
+        // onChange={handleJobDescriptionChange}
       />
     </FormTitle>
   </>

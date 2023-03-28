@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { useGetResumeListQuery, useUploadFileMutation } from 'state/generalApi';
+import { useGetResumeListQuery, useUploadFileMutation } from 'state/formApi';
 import useCustomToast from './useCustomToast';
 
 const useResumeUpload = () => {

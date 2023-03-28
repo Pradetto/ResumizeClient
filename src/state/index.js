@@ -1,28 +1,16 @@
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./authApi";
-import { generalApi } from "./generalApi";
+import { formApi } from "./formApi";
 
 const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
-    [generalApi.reducerPath]: generalApi.reducer,
+    [formApi.reducerPath]: formApi.reducer,
   },
   middleware: (getDefault) =>
-    getDefault().concat(authApi.middleware, generalApi.middleware),
+    getDefault().concat(authApi.middleware, formApi.middleware),
 });
 setupListeners(store.dispatch);
 
 export default store;
-
-// import { authApi } from "./authApi";
-// import { postsApi } from "./postsApi";
-
-// const store = configureStore({
-//   reducer: {
-//     [authApi.reducerPath]: authApi.reducer,
-//     [postsApi.reducerPath]: postsApi.reducer,
-//   },
-//   middleware: (getDefault) =>
-//     getDefault().concat(authApi.middleware, postsApi.middleware),
-// });

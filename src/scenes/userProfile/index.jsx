@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
-import { useContactInfoQuery } from "state/generalApi";
+import { useContactInfoQuery } from "state/formApi";
 import UserDataField from "./UserDataField";
 import { useMemo } from "react";
 import Error from "components/Error";

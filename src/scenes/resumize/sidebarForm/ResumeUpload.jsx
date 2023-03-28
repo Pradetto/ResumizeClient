@@ -1,5 +1,5 @@
 import { Button, FormControl, FormLabel, Input, Select, HStack, Checkbox } from "@chakra-ui/react";
-import { useGetResumeListQuery } from "state/generalApi";
+import { useGetResumeListQuery } from "state/formApi";
 
 const ResumeUpload = ({
   showUpload,
