@@ -15,7 +15,8 @@ export const formApi = createApi({
     "CompaniesList",
     "PostCompany",
     "CreateRole",
-    "JobsList",
+    "UniqueRole",
+    "ExistingLink",
   ],
   endpoints: (build) => ({
     contactInfo: build.query({
@@ -65,13 +66,27 @@ export const formApi = createApi({
     }),
 
     /* JOBS */
-    getJobsList: build.query({
+    getUnqiueRoles: build.query({
       query: (company_id) => ({
-        url: `/form/jobs/${company_id}`,
+        url: `/form/roles/${company_id}`,
         method: "GET",
       }),
-      providesTags: ["JobsList"],
+      providesTags: ["UniqueRoles"],
       invalidatesTags: [],
+    }),
+    getExistingLink: build.query({
+      query: (link) => ({
+        url: `/form/link/${link}`,
+        method: "GET",
+      }),
+      providesTags: ["ExistingLink"],
+      invalidatesTags: [],
+    }),
+    deleteDrafts: build.mutation({
+      query: () => ({
+        url: `/form/deletedrafts`,
+        method: "GET",
+      }),
     }),
     createRole: build.mutation({
       query: (data) => ({
@@ -80,7 +95,7 @@ export const formApi = createApi({
         body: data,
       }),
       providesTags: ["CreateRole"],
-      invalidatesTags: ["JobsList"],
+      invalidatesTags: ["UniqueRoles", "ExistingLink"],
     }),
 
     /* SUBMIT */
@@ -105,8 +120,10 @@ export const {
   useInsertCompanyMutation,
 
   /* JOBS */
-  useGetJobsListQuery,
+  useGetUnqiueRolesQuery,
+  useGetExistingLinkQuery,
   useCreateRoleMutation,
+  useDeleteDraftsMutation,
 
   /* SUBMIT */
   useUploadFormMutation,

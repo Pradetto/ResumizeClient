@@ -1,11 +1,12 @@
 import React from 'react'
 import { 
-    Input,
-    Textarea
+  Button,
+  Textarea
 } from '@chakra-ui/react';
 import CreatableSelect from 'react-select/creatable';
 import FormTitle from 'components/FormTitle';
-import { useCreateRoleMutation, useGetCompaniesListQuery, useGetJobsListQuery, useInsertCompanyMutation } from 'state/formApi';
+import { useCreateRoleMutation, useGetCompaniesListQuery, useGetUnqiueRolesQuery, useInsertCompanyMutation,useGetExistingLinkQuery, useDeleteDraftsMutation } from 'state/formApi';
+import useCustomToast from 'hooks/useCustomToast';
 
 const JobInfo = ({
   selectedCompany,
@@ -14,15 +15,37 @@ const JobInfo = ({
   selectedJob,
   setSelectedJob,
   handleSelectedJob,
-  handleSelectedJobChange
+  clearJobFilters,
+  clearCompanyFilters,
 }) => {
   const {data: companiesListData} = useGetCompaniesListQuery()
   const [insertCompany] = useInsertCompanyMutation()
-
-  const {data: jobsListData} = useGetJobsListQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
+  const [createLink] = useCreateRoleMutation()
   const [createRole] = useCreateRoleMutation()
+  const [deleteDrafts] = useDeleteDraftsMutation()
+  const {data: uniqueRoleData} = useGetUnqiueRolesQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
+  const {data: existingLink} = useGetExistingLinkQuery(selectedJob.link, {skip:selectedJob.link === ''})
+  
+  const customToast = useCustomToast()
+
+  const customComponents = {
+    DropdownIndicator: () => null, // Remove the dropdown indicator
+    IndicatorSeparator: () => null, // Remove the separator
+    // Menu: () => null, // Remove the menu
+  };
+
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      borderBottom: state.isFocused ? '2px solid #3182ce' : '2px solid #e2e8f0', // Customize the border color when focused
+      borderRadius: 0,
+      boxShadow: 'none',
+    }),
+  };
 return (
   <>
+
+    {/* COMPANY */}
     <FormTitle htmlFor="company" isRequired={true} text="Company">
       <CreatableSelect
         id="company"
@@ -50,39 +73,101 @@ return (
       />
     </FormTitle>
     
+
+
+    {/* LINK */}
     {selectedCompany.id !== '' &&
-    <FormTitle htmlFor="link" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. If you do have an exisitng one please edit that.">
-      <Input type='text' id='link' name='link' value={selectedJob.link} onChange={handleSelectedJobChange} placeholder={jobUrlPlaceholder}/>
+    <FormTitle htmlFor="link" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. Please try delete drafts button if you disconnected while trying to submit the form. If it still does not work after that visit the files page and edit it there.">
+      <CreatableSelect
+        id="link"
+        name="link"
+        value={
+          selectedJob.link
+            ? {
+                value: selectedJob.link,
+                label: selectedJob.link,
+              }
+            : null
+        }
+        // onChange={handleSelectedJobChange}
+        onCreateOption={(value) => {
+          console.log(value)
+          setSelectedJob((prevData) => {
+            return {...prevData,link: value}
+          })
+        }}
+        placeholder={jobUrlPlaceholder}
+        required
+        components={customComponents}
+        styles={customStyles}
+        noOptionsMessage={() => 'Press Enter or click here to create'}
+        formatCreateLabel={(inputValue) => `Create "${inputValue}"`}
+      />
     </FormTitle>
     }
 
+
+    {/* ROLE */}
     {selectedJob.link && (
-      <>
       <FormTitle htmlFor="role" isRequired={true} text="Role" tooltipLabel="This is the job title you are applying too.">
       <CreatableSelect
         id="role"
         value={
-          selectedJob.id && selectedJob.role
+          selectedJob.role_id
             ? {
-                value: selectedJob.id,
-                label: selectedJob.role,
+                value: selectedJob.role_id,
+                label: selectedJob.role_id,
               }
             : null
         }
         onChange={(option) => handleSelectedJob(option)}
         onCreateOption={async (newRole) => {
-          const res = await createRole({ company_id: selectedCompany.id, role_name:newRole });
-          console.log(res)
-          setSelectedJob((prevData) => ({
-              ...prevData,
-              id:res.data.id,
-              company_id:res.data.company_id,
-              role:res.data.role
-          }));
+          try {
+            const res = await createRole({
+              company_id: selectedCompany.id,
+              role_id: newRole,
+              link: selectedJob.link,
+              description: '',
+            });
+            console.log("this duplicate",res.error)
+            if (res.ok){
+              setSelectedJob(res.data)
+            } else if (res.error.data.message === "The link already exists for this user") {
+              throw new Error ("Duplicate")
+            } else {
+              throw new Error ('Error inserting creating Role')
+            }
+          } catch (error) {
+            console.error(error.message);
+            //will have to update here
+            // console.log(error)
+            if (error.message === 'Duplicate'){
+              customToast({
+                title: "Error job link already exists",
+                description: `Pleae update this exisitng link.`,
+                status: "error",
+              });
+              try {
+                console.log(existingLink)
+                setSelectedJob({company_id:'',role:'',link:'',description:''})
+              } catch (err){
+                console.error(err.message)
+                setSelectedJob({company_id:'',role:'',link:'',description:''})
+              }
+            } else {
+              customToast({
+              title: "Error creating role and job link",
+              description: `Please try creating the role and job link again`,
+              status: "error",
+              });
+              setSelectedJob((prevData) => {return {...prevData, link:'', role:'', description:''}})
+            }
+
+          }
         }}
         options={
-          jobsListData?.map((job) => ({
-            value: job.id,
+          uniqueRoleData?.map((job) => ({
+            value: job.role,
             label: job.role,
           })) || []
         }
@@ -90,6 +175,12 @@ return (
         required
       />
     </FormTitle>
+    )}
+
+
+
+    {/* DESCRIPTION */}
+    {selectedJob.role && (
     <FormTitle htmlFor="job-description" isRequired={true} text="Paste Job Description" tooltipLabel="The more text the more you use of your tokens. Please try to cut out as much fluff from your job description. The AI is smart enough to reduce the original text from the post to highlight key points to save you tokens on future edits and rerolls.">
       <Textarea
         id="job-description"
@@ -98,8 +189,18 @@ return (
         // onChange={handleJobDescriptionChange}
       />
     </FormTitle>
-    </>
     )}
+
+
+    {/* DELET DRAFTS BUTTON */}
+    <Button colorScheme="red" onClick={() => {
+      deleteDrafts() 
+      setSelectedCompany({id: '',company_name:''})
+      setSelectedJob({company_id:'',role:'',link:'',description:''})
+      }}
+      >
+        Del Drafts
+      </Button>
   </>
 )
 }
@@ -138,3 +239,8 @@ Proficient communication skills
 `
 
 export default JobInfo
+
+
+    // <FormTitle htmlFor="link" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. If you do have an exisitng one please edit that.">
+    //   <Input type='text' id='link' name='link' value={selectedJob.link} onChange={handleSelectedJobChange} placeholder={jobUrlPlaceholder}/>
+    // </FormTitle>

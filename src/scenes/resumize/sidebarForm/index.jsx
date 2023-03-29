@@ -42,7 +42,9 @@ const [
   selectedJob,
   setSelectedJob,
   handleSelectedJob,
-  handleSelectedJobChange
+  // handleSelectedJobChange,
+  clearJobFilters,
+  clearCompanyFilters,
 ] = useJobInfo()
   const customToast = useCustomToast()
   const [uploadForm] = useUploadFormMutation()
@@ -182,7 +184,9 @@ const handleHiringManagerChange = (option) => {
               selectedJob={selectedJob}
               setSelectedJob={setSelectedJob}
               handleSelectedJob={handleSelectedJob}
-              handleSelectedJobChange={handleSelectedJobChange}
+              // handleSelectedJobChange={handleSelectedJobChange}
+              clearJobFilters={clearJobFilters}
+              clearCompanyFilters={clearCompanyFilters}
               />
 
               <HStack gap={4} marginBottom="20px">
