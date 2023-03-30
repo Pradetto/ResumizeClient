@@ -36,16 +36,18 @@ const [
 ] = useResumeUpload();
 
 const [
-  selectedCompany,
-  setSelectedCompany,
-  handleSelectedCompany,
-  selectedJob,
-  setSelectedJob,
-  handleSelectedJob,
-  // handleSelectedJobChange,
-  clearJobFilters,
-  clearCompanyFilters,
-] = useJobInfo()
+      selectedCompany,
+      setSelectedCompany,
+      handleSelectedCompany,
+      selectedJob,
+      setSelectedJob,
+      handleSelectedJob,
+      selectedRole,
+      setSelectedRole,
+      clearJobFilters,
+      clearCompanyFilters,
+      clearRoleFilters,
+    ] = useJobInfo()
   const customToast = useCustomToast()
   const [uploadForm] = useUploadFormMutation()
 
@@ -187,6 +189,9 @@ const handleHiringManagerChange = (option) => {
               // handleSelectedJobChange={handleSelectedJobChange}
               clearJobFilters={clearJobFilters}
               clearCompanyFilters={clearCompanyFilters}
+              clearRoleFilters={clearRoleFilters}
+              selectedRole={selectedRole}
+              setSelectedRole={setSelectedRole}
               />
 
               <HStack gap={4} marginBottom="20px">
