@@ -23,7 +23,7 @@ const CoverLetter = ({handleGenerateCoverLetterChange,coverLetterText,handleCove
         </RadioGroup>
         </FormTitle>
         {generateCoverLetter && (
-        <FormTitle htmlFor="cover-letter-text" isRequired={false} text="Cover Letter Text" tooltipLabel="This part can be used to add custom items beyond your resume to this AI developed cover letter. Feel free to add anything to your cover letter">
+        <FormTitle htmlFor="cover-letter-text" isRequired={false} text="Cover Letter Instructions" tooltipLabel="This part can be used to add custom items beyond your resume to this AI developed cover letter. Feel free to add anything to your cover letter">
             <Textarea
             id="cover-letter-text"
             // value={coverLetterText}

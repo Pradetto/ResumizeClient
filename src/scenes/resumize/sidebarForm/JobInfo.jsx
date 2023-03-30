@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react';
 import CreatableSelect from 'react-select/creatable';
 import FormTitle from 'components/FormTitle';
-import { useCreateRoleMutation, useGetCompaniesListQuery, useGetUnqiueRolesQuery, useInsertCompanyMutation,useGetExistingLinkQuery, useDeleteDraftsMutation } from 'state/formApi';
+import { useCreateJobMutation, useGetCompaniesListQuery, useGetUnqiueRolesQuery, useInsertCompanyMutation, useDeleteDraftsMutation, useGetExistingLinkMutation, useCreateRoleMutation } from 'state/formApi';
 import useCustomToast from 'hooks/useCustomToast';
 
 const JobInfo = ({
@@ -17,27 +17,29 @@ const JobInfo = ({
   handleSelectedJob,
   clearJobFilters,
   clearCompanyFilters,
+  clearRoleFilters,
+  selectedRole,
+  setSelectedRole,
 }) => {
   const {data: companiesListData} = useGetCompaniesListQuery()
   const [insertCompany] = useInsertCompanyMutation()
-  const [createLink] = useCreateRoleMutation()
-  const [createRole] = useCreateRoleMutation()
+  // const [createLink] = useCreateRoleMutation()
+  const [createJob] = useCreateJobMutation()
+  const [existingLink] = useGetExistingLinkMutation()
   const [deleteDrafts] = useDeleteDraftsMutation()
+  const [createRole] = useCreateRoleMutation()
   const {data: uniqueRoleData} = useGetUnqiueRolesQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
-  const {data: existingLink} = useGetExistingLinkQuery(selectedJob.link, {skip:selectedJob.link === ''})
-  
   const customToast = useCustomToast()
 
   const customComponents = {
-    DropdownIndicator: () => null, // Remove the dropdown indicator
-    IndicatorSeparator: () => null, // Remove the separator
-    // Menu: () => null, // Remove the menu
+    DropdownIndicator: () => null,
+    IndicatorSeparator: () => null, 
   };
 
   const customStyles = {
     control: (base, state) => ({
       ...base,
-      borderBottom: state.isFocused ? '2px solid #3182ce' : '2px solid #e2e8f0', // Customize the border color when focused
+      borderBottom: state.isFocused ? '2px solid #3182ce' : '2px solid #e2e8f0',
       borderRadius: 0,
       boxShadow: 'none',
     }),
@@ -60,8 +62,24 @@ return (
         onChange={(option) => handleSelectedCompany(option)}
         onCreateOption={async (newCompanyName) => {
           const res = await insertCompany({ company_name: newCompanyName });
-          setSelectedCompany({ id: res.data.id, company_name: res.data.company_name, link: '', description: '' });
+
+          if (!res.error){
+            customToast({
+              title: "Success!",
+              description: `Company created.`,
+              status: "success",
+            });
+            setSelectedCompany({ id: res.data.id, company_name: res.data.company_name, link: '', description: '' });
+          } else {
+            clearCompanyFilters()
+            customToast({
+              title: "Error!",
+              description: `Company not created. Try again please.`,
+              status: "error",
+            });
+          }
         }}
+
         options={
           companiesListData?.map((company) => ({
             value: company.id,
@@ -89,12 +107,42 @@ return (
               }
             : null
         }
-        // onChange={handleSelectedJobChange}
-        onCreateOption={(value) => {
-          console.log(value)
-          setSelectedJob((prevData) => {
-            return {...prevData,link: value}
-          })
+
+        onCreateOption={async (value) => {
+          const res = await createJob({ company_id: selectedCompany.id, link:value });
+
+          if (!res.error){
+            customToast({
+              title: "Success!",
+              description: `Job created.`,
+              status: "success",
+            });
+            setSelectedJob(prevData => ({
+              ...prevData,
+              company_id: res.data.company_id,
+              link: res.data.link
+            }));
+          } else if (res.error.data.message === "The link already exists for this user") {
+            const result = await existingLink(value)
+            setSelectedJob(prevData => ({
+              ...prevData,
+              link: result.data.link,
+              role_id:result.data.role_id,
+              description: result.data.description
+            }));
+            customToast({
+              title: "Job link already exists!",
+              description: `Fetched existing job.`,
+              status: "error",
+            });
+          } else {
+            clearJobFilters()
+            customToast({
+              title: "Error!",
+              description: `Job not created. Try again please.`,
+              status: "error",
+            });
+          }
         }}
         placeholder={jobUrlPlaceholder}
         required
@@ -109,66 +157,56 @@ return (
 
     {/* ROLE */}
     {selectedJob.link && (
-      <FormTitle htmlFor="role" isRequired={true} text="Role" tooltipLabel="This is the job title you are applying too.">
+      <FormTitle htmlFor="role" isRequired={true} text="Role" tooltipLabel="This is the Role you are applying too.">
       <CreatableSelect
         id="role"
         value={
-          selectedJob.role_id
+          selectedRole.id && selectedRole.role_name
             ? {
-                value: selectedJob.role_id,
-                label: selectedJob.role_id,
+                value: selectedRole.id,
+                label: selectedRole.role_name,
               }
             : null
         }
-        onChange={(option) => handleSelectedJob(option)}
-        onCreateOption={async (newRole) => {
-          try {
-            const res = await createRole({
-              company_id: selectedCompany.id,
-              role_id: newRole,
-              link: selectedJob.link,
-              description: '',
-            });
-            console.log("this duplicate",res.error)
-            if (res.ok){
-              setSelectedJob(res.data)
-            } else if (res.error.data.message === "The link already exists for this user") {
-              throw new Error ("Duplicate")
-            } else {
-              throw new Error ('Error inserting creating Role')
-            }
-          } catch (error) {
-            console.error(error.message);
-            //will have to update here
-            // console.log(error)
-            if (error.message === 'Duplicate'){
-              customToast({
-                title: "Error job link already exists",
-                description: `Pleae update this exisitng link.`,
-                status: "error",
-              });
-              try {
-                console.log(existingLink)
-                setSelectedJob({company_id:'',role:'',link:'',description:''})
-              } catch (err){
-                console.error(err.message)
-                setSelectedJob({company_id:'',role:'',link:'',description:''})
-              }
-            } else {
-              customToast({
-              title: "Error creating role and job link",
-              description: `Please try creating the role and job link again`,
-              status: "error",
-              });
-              setSelectedJob((prevData) => {return {...prevData, link:'', role:'', description:''}})
-            }
+        onChange={(option) => {
+          handleSelectedJob(option)
+        }}
+        onCreateOption={async (value) => {
+          const res = await createRole({ company_id: selectedCompany.id, role_name:value });
 
+          if (!res.error){
+            customToast({
+              title: "Success!",
+              description: `Job created.`,
+              status: "success",
+            });
+            setSelectedJob(prevData => ({
+              ...prevData,
+              role_id: res.data.id,
+            }));
+            setSelectedRole({
+              id: res.data.id,
+              role_name: res.data.role_name
+            });
+          } else if (res.error.data.message === "The role already exists for this company") {
+            customToast({
+              title: "Role already exists!",
+              description: `Please select from dropdown.`,
+              status: "error",
+            });
+          } else {
+            clearRoleFilters()
+            customToast({
+              title: "Error!",
+              description: `Role not created. Try again please.`,
+              status: "error",
+            });
           }
         }}
         options={
           uniqueRoleData?.map((job) => ({
-            value: job.role,
-            label: job.role,
+            value: job.id,
+            label: job.role_name,
           })) || []
         }
         placeholder="Select or type to create..."
@@ -180,13 +218,16 @@ return (
 
 
     {/* DESCRIPTION */}
-    {selectedJob.role && (
+    {selectedJob.role_id && (
     <FormTitle htmlFor="job-description" isRequired={true} text="Paste Job Description" tooltipLabel="The more text the more you use of your tokens. Please try to cut out as much fluff from your job description. The AI is smart enough to reduce the original text from the post to highlight key points to save you tokens on future edits and rerolls.">
       <Textarea
         id="job-description"
-        // value={jobDescription}
+        value={selectedJob.description}
         placeholder={jobDescriptionPlaceholder}
-        // onChange={handleJobDescriptionChange}
+        onChange={(e) => setSelectedJob(prevData => {
+          console.log(selectedJob)
+          return {...prevData, description:e.target.value}
+        })}
       />
     </FormTitle>
     )}
@@ -239,8 +280,3 @@ Proficient communication skills
 `
 
 export default JobInfo
-
-
-    // <FormTitle htmlFor="link" isRequired={true} text="Job Link (URL)" tooltipLabel="Paste a unqiue URL that you haven't used in the paste. There is an error handler to prevent you from making duplicate cover letters for a job. If you do have an exisitng one please edit that.">
-    //   <Input type='text' id='link' name='link' value={selectedJob.link} onChange={handleSelectedJobChange} placeholder={jobUrlPlaceholder}/>
-    // </FormTitle>
