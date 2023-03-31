@@ -2,5 +2,5 @@
     "compilerOptions": {
         "baseUrl": "src"
     },
-    "include": ["src", "jsconfig.json", "old/SidebarOld.jsx", "RefactoredThisNavbar.jsx"]
+    "include": ["src", "jsconfig.json", "old/SidebarOld.jsx", "RefactoredThisNavbar.jsx", "old/OldSidebar.jsx"]
 }
