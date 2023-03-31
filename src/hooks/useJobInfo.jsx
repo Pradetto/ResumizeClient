@@ -2,15 +2,15 @@ import {useState} from 'react'
 
 const useJobInfo = () => {
   const [selectedCompany, setSelectedCompany] = useState({id: '',company_name:''})
-  const [selectedJob, setSelectedJob] = useState({company_id:'',role_id:'',link:'',description:''})
+  const [selectedJob, setSelectedJob] = useState({id:'',company_id:'',role_id:'',link:'',description:''})
   const [selectedRole,setSelectedRole] = useState({id:'',role_name:''})
 
   const clearFilters = () => {
     setSelectedCompany({id: '',company_name:''})
-    setSelectedJob({company_id:'',role_id:'',link:'',description:''})
+    setSelectedJob({id:'',company_id:'',role_id:'',link:'',description:''})
   }
   const clearJobFilters = () => {
-    setSelectedJob({company_id:'',role_id:'',link:'',description:''})
+    setSelectedJob({id:'',company_id:'',role_id:'',link:'',description:''})
   }
   const clearCompanyFilters = () => {
     setSelectedCompany({id: '',company_name:''})
@@ -27,7 +27,6 @@ const useJobInfo = () => {
 
   const handleSelectedJob = (role) => {
     clearRoleFilters()
-    console.log('handleselectedjob',role)
     setSelectedRole({ id: role.value, role_name: role.label });
     setSelectedJob((prevData) => {
       return { ...prevData, role_id: role.value };

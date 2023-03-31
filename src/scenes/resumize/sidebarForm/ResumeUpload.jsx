@@ -1,5 +1,7 @@
-import { Button, FormControl, FormLabel, Input, Select, HStack, Checkbox } from "@chakra-ui/react";
+import React from "react";
+import { Button, FormControl, FormLabel, Input, HStack, Checkbox, } from "@chakra-ui/react";
 import { useGetResumeListQuery } from "state/formApi";
+import {Select} from "chakra-react-select";
 
 const ResumeUpload = ({
   showUpload,
@@ -10,6 +12,12 @@ const ResumeUpload = ({
   setSelectedResumeData
 }) => {
   const {data:resumeListData} = useGetResumeListQuery()
+
+  const options = resumeListData?.map((resume) => ({
+  value: resume.file_key,
+  label: resume.file_name,
+  })) || [];
+
   return (
     <>
       <Button
@@ -32,6 +40,23 @@ const ResumeUpload = ({
           <HStack>
             <Select
               id="selected-file"
+              size="lg"
+              value={
+                selectedResumeData.file_key
+                  ? {
+                      value: selectedResumeData.file_key,
+                      label: resumeListData.find(
+                        (resume) => resume.file_key === selectedResumeData.file_key
+                      )?.file_name,
+                    }
+                  : null
+              }
+              onChange={(option) => handleResumeSelect(option)}
+              options={options}
+              placeholder="--Select--"
+            />
+            {/* <Select
+              id="selected-file"
               value={selectedResumeData.file_key}
               onChange={handleResumeSelect}
             >
@@ -44,7 +69,7 @@ const ResumeUpload = ({
                   >{resume.file_name}</option>
                 )
               })}
-            </Select>
+            </Select> */}
               <Checkbox
                 isChecked={selectedResumeData.is_default}
                 onChange={() => setSelectedResumeData({...selectedResumeData, is_default: !selectedResumeData.is_default})}

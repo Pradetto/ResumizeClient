@@ -15,7 +15,7 @@ const MotionBox = motion(Box);
 
 const About = () => {
   const bgColor = useColorModeValue('gray.50', 'gray.700');
-  const boxColor = useColorModeValue('white', 'gray.800');
+  // const boxColor = useColorModeValue('white', 'gray.800');
 
   const gridInfo = [
             {
@@ -60,7 +60,7 @@ const About = () => {
               borderRadius='md'
               borderWidth='1px'
               p={6}
-              bg={boxColor}
+              // bg={boxColor}
               boxShadow='lg'
               _hover={{
                 boxShadow: 'xl',

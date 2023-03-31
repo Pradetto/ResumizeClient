@@ -1,11 +1,11 @@
 import React from 'react'
 import { 
-  Button,
-  Textarea
+  Textarea,
 } from '@chakra-ui/react';
-import CreatableSelect from 'react-select/creatable';
+// import CreatableSelect from 'react-select/creatable';
+import { CreatableSelect } from "chakra-react-select";
 import FormTitle from 'components/FormTitle';
-import { useCreateJobMutation, useGetCompaniesListQuery, useGetUnqiueRolesQuery, useInsertCompanyMutation, useDeleteDraftsMutation, useGetExistingLinkMutation, useCreateRoleMutation } from 'state/formApi';
+import { useCreateJobMutation, useGetCompaniesListQuery, useGetUnqiueRolesQuery, useInsertCompanyMutation, useGetExistingLinkMutation, useCreateRoleMutation } from 'state/formApi';
 import useCustomToast from 'hooks/useCustomToast';
 
 const JobInfo = ({
@@ -23,10 +23,8 @@ const JobInfo = ({
 }) => {
   const {data: companiesListData} = useGetCompaniesListQuery()
   const [insertCompany] = useInsertCompanyMutation()
-  // const [createLink] = useCreateRoleMutation()
   const [createJob] = useCreateJobMutation()
   const [existingLink] = useGetExistingLinkMutation()
-  const [deleteDrafts] = useDeleteDraftsMutation()
   const [createRole] = useCreateRoleMutation()
   const {data: uniqueRoleData} = useGetUnqiueRolesQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
   const customToast = useCustomToast()
@@ -35,15 +33,7 @@ const JobInfo = ({
     DropdownIndicator: () => null,
     IndicatorSeparator: () => null, 
   };
-
-  const customStyles = {
-    control: (base, state) => ({
-      ...base,
-      borderBottom: state.isFocused ? '2px solid #3182ce' : '2px solid #e2e8f0',
-      borderRadius: 0,
-      boxShadow: 'none',
-    }),
-  };
+  
 return (
   <>
 
@@ -88,6 +78,7 @@ return (
         }
         placeholder="Select or type to create..."
         required
+        // styles={customStyles}
       />
     </FormTitle>
     
@@ -119,6 +110,7 @@ return (
             });
             setSelectedJob(prevData => ({
               ...prevData,
+              id: res.data.id,
               company_id: res.data.company_id,
               link: res.data.link
             }));
@@ -126,6 +118,7 @@ return (
             const result = await existingLink(value)
             setSelectedJob(prevData => ({
               ...prevData,
+              id: res.data.id,
               link: result.data.link,
               role_id:result.data.role_id,
               description: result.data.description
@@ -147,7 +140,7 @@ return (
         placeholder={jobUrlPlaceholder}
         required
         components={customComponents}
-        styles={customStyles}
+        // styles={customStyles}
         noOptionsMessage={() => 'Press Enter or click here to create'}
         formatCreateLabel={(inputValue) => `Create "${inputValue}"`}
       />
@@ -211,6 +204,7 @@ return (
         }
         placeholder="Select or type to create..."
         required
+        // styles={customStyles}
       />
     </FormTitle>
     )}
@@ -225,7 +219,6 @@ return (
         value={selectedJob.description}
         placeholder={jobDescriptionPlaceholder}
         onChange={(e) => setSelectedJob(prevData => {
-          console.log(selectedJob)
           return {...prevData, description:e.target.value}
         })}
       />
@@ -233,15 +226,7 @@ return (
     )}
 
 
-    {/* DELET DRAFTS BUTTON */}
-    <Button colorScheme="red" onClick={() => {
-      deleteDrafts() 
-      setSelectedCompany({id: '',company_name:''})
-      setSelectedJob({company_id:'',role:'',link:'',description:''})
-      }}
-      >
-        Del Drafts
-      </Button>
+
   </>
 )
 }

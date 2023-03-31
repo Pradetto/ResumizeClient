@@ -38,7 +38,7 @@ export const formApi = createApi({
     }),
     uploadFile: build.mutation({
       query: (file) => ({
-        url: `/form/upload`,
+        url: `/general/upload`,
         method: "POST",
         body: file,
       }),

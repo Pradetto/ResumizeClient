@@ -27,23 +27,17 @@ const useResumeUpload = () => {
         }
     }, [resumeListData]);
 
-    // useEffect(() => {
-    //     const selectedResume = resumeListData?.find((resume) => resume.file_key === selectedResumeFile);
-    //     if (selectedResume) {
-    //         setIsDefault(selectedResume.is_default);
-    //     }
-    // }, [selectedResumeFile, resumeListData]);
-
-
-    const handleResumeSelect = (e) => {
-    if (e.target.type === 'select-one') {
-        const newSelectedResume = e.target.value
-        const resume = resumeListData?.find((resume) => resume.file_key === newSelectedResume);
+    const handleResumeSelect = (option) => {
+    if (option) {
+        const newSelectedResume = option.value;
+        const resume = resumeListData?.find(
+        (resume) => resume.file_key === newSelectedResume
+        );
         setSelectedResumeData({
         id: resume.id,
         user_id: resume.user_id,
         file_key: resume.file_key,
-        is_default: resume.is_default
+        is_default: resume.is_default,
         });
     }
     };
@@ -57,11 +51,14 @@ const useResumeUpload = () => {
     const handleResumeUpload = async (uploadResumedFile) => {
         if (!uploadResumedFile) return;
 
+        console.log("made it")
         try {
             const formData = new FormData()
             formData.append("file",uploadResumedFile)
             formData.append("isDefault",  selectedResumeData.is_default ? '1' : '0')
+            console.log('1')
             await uploadFile(formData).unwrap()
+            console.log('2')
             customToast({
             title: "Succesful resume upload",
             description: "You have successfully uploaded your resume.",

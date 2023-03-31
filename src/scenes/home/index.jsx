@@ -1,4 +1,4 @@
-import { Button, Container, Flex, Heading, Text, Link,useColorModeValue } from "@chakra-ui/react";
+import { Button, Container, Flex, Heading, Text, Link,useColorModeValue, useColorMode } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import unemployed from "../../assets/unemployed.svg";
@@ -10,7 +10,12 @@ const Home = () => {
     transition: { duration: 2, loop: Infinity },
   };
   const {data: isAuthenticated} = useIsAuthenticatedQuery()
+
+  const { colorMode } = useColorMode();
   const bgColor = useColorModeValue('gray.50', 'gray.700');
+  // const boxColor = useColorModeValue('white', 'gray.800');
+  const buttonColor = colorMode === "dark" ? "purple.700" : undefined;
+  const buttonTextColor = colorMode === "dark" ? "white" : undefined;
 
   return (
     <Flex direction="column" minHeight="var(--main-container-height)" bg={bgColor}>
@@ -38,12 +43,12 @@ const Home = () => {
             </Button>
           </Link>}
           {isAuthenticated && <Link as={RouterLink} to="/resumize">
-            <Button colorScheme="blue" size="lg" mr={4}>
+            <Button colorScheme="blue" size="lg" mr={4} bg={buttonColor} color={buttonTextColor}>
               Resumize
             </Button>
           </Link>}
           <Link as={RouterLink} to="/about">
-            <Button variant="outline" size="lg">
+            <Button  size="lg">
               Learn More
             </Button>
           </Link>

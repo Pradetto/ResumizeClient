@@ -12,6 +12,7 @@ import {
   HStack,
   useDisclosure,
   useMediaQuery,
+  useColorModeValue
 } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
@@ -20,9 +21,10 @@ import JobInfo from './JobInfo';
 import HiringManagerInfo from './HiringManagerInfo';
 import CoverLetter from './CoverLetter';
 import useResumeUpload from 'hooks/useResumeUpload';
-import { useUploadFormMutation } from 'state/formApi';
+import { useDeleteDraftsMutation, useUploadFormMutation } from 'state/formApi';
 import useJobInfo from 'hooks/useJobInfo';
 import useCustomToast from 'hooks/useCustomToast';
+import useHiringManagerAndInstructions from 'hooks/useHiringManagerAndInstructions';
 
 
 const SidebarForm = () => {
@@ -48,40 +50,22 @@ const [
       clearCompanyFilters,
       clearRoleFilters,
     ] = useJobInfo()
+
+    const [
+        coverLetterInstructions,
+        setCoverLetterInstructions,
+        selectedHiringManager,
+        setSelectedHiringManager,
+        handleHiringManagerChange,
+    ] = useHiringManagerAndInstructions()
   const customToast = useCustomToast()
   const [uploadForm] = useUploadFormMutation()
-
-  /* OLD SETUP */
+  const [deleteDrafts] = useDeleteDraftsMutation()
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
-
   const [showOptionalFields, setShowOptionalFields] = useState(false);
-
-const handleHiringManagerChange = (option) => {
-  if (option) {
-    setSubformData((prevData) => ({
-      ...prevData,
-      hiring_manager: option.label,
-    }));
-  } else {
-    setSubformData((prevData) => ({
-      ...prevData,
-      hiring_manager: '',
-    }));
-  }
-};
-
-
-  const [subformData, setSubformData] = useState({
-    company_name: '',
-    role: '',
-    hiring_manager: '',
-    address: '',
-    phone: '',
-    email: '',
-  });
-
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const boxColor = useColorModeValue(undefined, 'gray.800');
 
   const validateCompanyHandler = () => {
 
@@ -138,12 +122,12 @@ const handleHiringManagerChange = (option) => {
           justifyContent="center"
           alignItems="center"
           zIndex="docked"
-          // backgroundColor="gray.100"
+          bg={boxColor}
           onClick={onOpen}
           style={{ cursor: 'pointer' }}
           // colorScheme='whatsapp'
         >
-          <ChevronUpIcon />
+          <ChevronUpIcon  boxSize={'50px'}/>
         </Button>
       ) : (
         <Button
@@ -155,12 +139,12 @@ const handleHiringManagerChange = (option) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          // backgroundColor="gray.100"
+          bg={boxColor}
           onClick={onOpen}
           style={{ cursor: 'pointer' }}
           // colorScheme='whatsapp'
         >
-          <ChevronRightIcon />
+          <ChevronRightIcon boxSize={'50px'}/>
         </Button>
       )}
       <Drawer isOpen={isOpen} onClose={onClose} placement={isMobile ? "bottom" : "left"} size="sm">
@@ -186,7 +170,6 @@ const handleHiringManagerChange = (option) => {
               selectedJob={selectedJob}
               setSelectedJob={setSelectedJob}
               handleSelectedJob={handleSelectedJob}
-              // handleSelectedJobChange={handleSelectedJobChange}
               clearJobFilters={clearJobFilters}
               clearCompanyFilters={clearCompanyFilters}
               clearRoleFilters={clearRoleFilters}
@@ -194,24 +177,47 @@ const handleHiringManagerChange = (option) => {
               setSelectedRole={setSelectedRole}
               />
 
-              <HStack gap={4} marginBottom="20px">
+              <HStack gap={4} marginBottom="20px" justify={'center'}>
                 <Button
                   onClick={() => setShowOptionalFields(!showOptionalFields)}
-                  // marginBottom="20px"
+                  isDisabled={!selectedJob.id}
                 >
                   {showOptionalFields ? 'Hide' : 'Show'} Optional Fields
                 </Button>
-                <Button colorScheme="yellow" marginLeft="10px" onClick={() => {console.log('Add button reset')}}>
+                {/* <Button colorScheme="yellow" marginLeft="10px" onClick={() => {console.log('Add button reset')}}>
                   Reset Filters
-                </Button>
+                </Button> */}
               </HStack>
 
-              {showOptionalFields && <HiringManagerInfo />}
+              {showOptionalFields && 
+              <HiringManagerInfo 
+              selectedHiringManager={selectedHiringManager}
+              setSelectedHiringManager={setSelectedHiringManager}
+              handleHiringManagerChange={handleHiringManagerChange}
+              selectedJob={selectedJob}
+              />}
               {/* RESUME STUFF CAN GO HERE */}
-              <CoverLetter />
+              <CoverLetter 
+              coverLetterInstructions={coverLetterInstructions}
+              setCoverLetterInstructions={setCoverLetterInstructions}
+              selectedHiringManager={selectedHiringManager}
+              setSelectedHiringManager={setSelectedHiringManager}
+              selectedJob={selectedJob}
+              />
               
               <DrawerFooter>
+                <HStack>    {/* DELET DRAFTS BUTTON */}
+              <Button colorScheme="red" onClick={() => {
+                deleteDrafts() 
+                clearRoleFilters()
+                clearJobFilters()
+                clearCompanyFilters()
+                }}
+                >
+                  Del Drafts
+                </Button>
                 <Button type="submit" colorScheme='green'>Submit</Button>
+                </HStack>
               </DrawerFooter>
             </Box>
           </DrawerBody>
