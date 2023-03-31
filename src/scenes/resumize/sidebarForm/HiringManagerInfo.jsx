@@ -4,11 +4,11 @@ import { CreatableSelect } from 'chakra-react-select';
 import FormTitle from 'components/FormTitle';
 // import { useGetHiringManagersQuery, useCreateHiringManagerMutation } from './fictitiousApi';
 import useCustomToast from 'hooks/useCustomToast';
+import { useCreateHiringManagerMutation, useGetRolesAndHiringManagerQuery } from 'state/formApi';
 
-const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,handleHiringManagerChange,selectedJob }) => {
-//   const { data: hiringManagersData } = useGetHiringManagersQuery();
-//   const [createHiringManager] = useCreateHiringManagerMutation();
-  const hiringManagersData = []
+const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,handleHiringManagerChange,selectedJob,selectedCompany }) => {
+  const {data: roleAndHiringManagerData} = useGetRolesAndHiringManagerQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
+  const [createHiringManager] = useCreateHiringManagerMutation()
   const customToast = useCustomToast();
 
   return (
@@ -16,8 +16,20 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
       <FormTitle htmlFor='name' isRequired={false} text='Hiring Manager Name'>
         <CreatableSelect
           id='name'
-        //   value={selectedHiringManager.name ? { label: selectedHiringManager.name } : null}
-          onChange={(option) => setSelectedHiringManager({ ...selectedHiringManager, name: option.label })}
+          value={
+          selectedHiringManager.id
+            ? {
+                value: selectedHiringManager.id,
+                label: selectedHiringManager.name,
+              }
+            : null
+        }
+          onChange={(option) => {
+            const personData = roleAndHiringManagerData?.hiring_manager.find((person) => {
+              return person.id === option.value
+            })
+            setSelectedHiringManager({id:personData.id, name: personData.hiring_manager,email: personData.email,phone: personData.phone,address: personData.address })
+          }}
           onCreateOption={async (newManagerName) => {
             if (!selectedJob.id){
               customToast({
@@ -27,8 +39,8 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
               });
               return
             }
-            // const res = await createHiringManager({ name: newManagerName });
-            const res = {}
+            
+            const res = await createHiringManager({company_id: selectedCompany.id,hiring_manager:newManagerName})
 
             if (!res.error) {
               customToast({
@@ -36,7 +48,7 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
                 description: `Hiring Manager created.`,
                 status: 'success',
               });
-              setSelectedHiringManager({ ...selectedHiringManager, name: newManagerName });
+              setSelectedHiringManager({ ...selectedHiringManager, id: res.data.id,name: newManagerName });
             } else {
               customToast({
                 title: 'Error!',
@@ -46,9 +58,9 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
             }
           }}
           options={
-            hiringManagersData?.map((manager) => ({
-              value: manager.name,
-              label: manager.name,
+            roleAndHiringManagerData?.hiring_manager.map((manager) => ({
+              value: manager.id,
+              label: manager.hiring_manager,
             })) || []
           }
           placeholder='Select or type to create...'

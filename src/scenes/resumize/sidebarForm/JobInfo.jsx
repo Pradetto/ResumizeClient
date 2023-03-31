@@ -5,7 +5,7 @@ import {
 // import CreatableSelect from 'react-select/creatable';
 import { CreatableSelect } from "chakra-react-select";
 import FormTitle from 'components/FormTitle';
-import { useCreateJobMutation, useGetCompaniesListQuery, useGetUnqiueRolesQuery, useInsertCompanyMutation, useGetExistingLinkMutation, useCreateRoleMutation } from 'state/formApi';
+import { useCreateJobMutation, useGetCompaniesListQuery, useGetRolesAndHiringManagerQuery, useInsertCompanyMutation, useGetExistingLinkMutation, useCreateRoleMutation } from 'state/formApi';
 import useCustomToast from 'hooks/useCustomToast';
 
 const JobInfo = ({
@@ -26,7 +26,7 @@ const JobInfo = ({
   const [createJob] = useCreateJobMutation()
   const [existingLink] = useGetExistingLinkMutation()
   const [createRole] = useCreateRoleMutation()
-  const {data: uniqueRoleData} = useGetUnqiueRolesQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
+  const {data: roleAndHiringManagerData} = useGetRolesAndHiringManagerQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
   const customToast = useCustomToast()
 
   const customComponents = {
@@ -197,7 +197,7 @@ return (
           }
         }}
         options={
-          uniqueRoleData?.map((job) => ({
+          roleAndHiringManagerData?.roles.map((job) => ({
             value: job.id,
             label: job.role_name,
           })) || []
