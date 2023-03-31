@@ -57,6 +57,7 @@ const [
         selectedHiringManager,
         setSelectedHiringManager,
         handleHiringManagerChange,
+        clearHiringManagerFilters
     ] = useHiringManagerAndInstructions()
   const customToast = useCustomToast()
   const [uploadForm] = useUploadFormMutation()
@@ -93,6 +94,8 @@ const [
       });
       return
     }
+
+    
     
     let data = {}
     // console.log(selectedResumeFile)
@@ -195,6 +198,7 @@ const [
               setSelectedHiringManager={setSelectedHiringManager}
               handleHiringManagerChange={handleHiringManagerChange}
               selectedJob={selectedJob}
+              selectedCompany={selectedCompany}
               />}
               {/* RESUME STUFF CAN GO HERE */}
               <CoverLetter 
@@ -212,6 +216,7 @@ const [
                 clearRoleFilters()
                 clearJobFilters()
                 clearCompanyFilters()
+                clearHiringManagerFilters()
                 }}
                 >
                   Del Drafts
