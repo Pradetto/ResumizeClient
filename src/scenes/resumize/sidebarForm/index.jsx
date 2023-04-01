@@ -26,7 +26,6 @@ import useJobInfo from 'hooks/useJobInfo';
 import useCustomToast from 'hooks/useCustomToast';
 import useHiringManagerAndInstructions from 'hooks/useHiringManagerAndInstructions';
 
-
 const SidebarForm = () => {
 const [
   showUpload,
@@ -34,7 +33,7 @@ const [
   handleFileInputChange,
   handleResumeSelect,
   selectedResumeData,
-  setSelectedResumeData
+  setSelectedResumeData,
 ] = useResumeUpload();
 
 const [
@@ -57,7 +56,8 @@ const [
         selectedHiringManager,
         setSelectedHiringManager,
         handleHiringManagerChange,
-        clearHiringManagerFilters
+        clearHiringManagerFilters,
+        clearCoverLetterInstructions,
     ] = useHiringManagerAndInstructions()
   const customToast = useCustomToast()
   const [uploadForm] = useUploadFormMutation()
@@ -67,6 +67,7 @@ const [
   const [showOptionalFields, setShowOptionalFields] = useState(false);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const boxColor = useColorModeValue(undefined, 'gray.800');
+
 
   const validateCompanyHandler = () => {
 
@@ -94,8 +95,6 @@ const [
       });
       return
     }
-
-    
     
     let data = {}
     // console.log(selectedResumeFile)
@@ -105,6 +104,37 @@ const [
 
     try {
       await uploadForm(data)
+      const templateData = {
+        user: {
+          firstname: "",
+          lastname: "",
+          address: "",
+          phone: "",
+          email: "",
+        },
+        date: new Date().toLocaleDateString(),
+        default_name: "",
+        render_employer: true,
+        required_employer: {
+          company_name: "",
+          role: "",
+        },
+        employer: {
+          hiring_manager: "",
+          address: "",
+          phone: "",
+          email: "",
+        },
+        content: {
+          introduction_paragraph: "",
+          body_paragraphs: [
+            "",
+            "",
+            "",
+          ],
+          closing_paragraph: "",
+        },
+      };
     } catch (err){
       console.error(err.message)
     }
@@ -187,9 +217,6 @@ const [
                 >
                   {showOptionalFields ? 'Hide' : 'Show'} Optional Fields
                 </Button>
-                {/* <Button colorScheme="yellow" marginLeft="10px" onClick={() => {console.log('Add button reset')}}>
-                  Reset Filters
-                </Button> */}
               </HStack>
 
               {showOptionalFields && 
@@ -217,6 +244,7 @@ const [
                 clearJobFilters()
                 clearCompanyFilters()
                 clearHiringManagerFilters()
+                clearCoverLetterInstructions()
                 }}
                 >
                   Del Drafts
@@ -230,7 +258,6 @@ const [
       </Drawer>
     </>
   );
-
 }
 
 export default SidebarForm
