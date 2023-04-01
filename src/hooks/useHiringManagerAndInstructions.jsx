@@ -14,6 +14,10 @@ const useHiringManagerAndInstructions = () => {
     setSelectedHiringManager({id: '',name: '',email: '',phone: '',address: '',})
   }
 
+  const clearCoverLetterInstructions = () => {
+    setCoverLetterInstructions('')
+  }
+
   const handleHiringManagerChange = (e) => {
     const key = e.target.name;
     const value = e.target.value;
@@ -29,7 +33,8 @@ const useHiringManagerAndInstructions = () => {
     selectedHiringManager,
     setSelectedHiringManager,
     handleHiringManagerChange,
-    clearHiringManagerFilters
+    clearHiringManagerFilters,
+    clearCoverLetterInstructions
   ];
 };
 

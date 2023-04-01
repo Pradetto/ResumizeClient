@@ -37,15 +37,6 @@ export const formApi = createApi({
       providesTags: ["ResumeList"],
       invalidatesTags: ["UploadFile"],
     }),
-    uploadFile: build.mutation({
-      query: (file) => ({
-        url: `/general/upload`,
-        method: "POST",
-        body: file,
-      }),
-      providesTags: ["UploadFile"],
-      invalidatesTags: ["ResumeList"],
-    }),
 
     /* COMPANY */
     getCompaniesList: build.query({
@@ -127,13 +118,30 @@ export const formApi = createApi({
         body: data,
       }),
     }),
+
+    /* GENERAL FILE PROCESSING */
+    uploadFile: build.mutation({
+      query: (file) => ({
+        url: `/general/upload`,
+        method: "POST",
+        body: file,
+      }),
+      providesTags: ["UploadFile"],
+      invalidatesTags: ["ResumeList"],
+    }),
+
+    downloadCoverLetter: build.mutation({
+      query: (fileKey) => ({
+        url: `/general/download?file_key=${fileKey}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
   useContactInfoQuery,
   /* RESUME */
-  useUploadFileMutation,
   useGetResumeListQuery,
 
   /* COMPANY */
@@ -156,4 +164,8 @@ export const {
 
   /* SUBMIT */
   useUploadFormMutation,
+
+  /* GENERAL FILE PROCESSING */
+  useUploadFileMutation,
+  useDownloadCoverLetterMutation,
 } = formApi;
