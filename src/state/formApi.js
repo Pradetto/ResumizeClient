@@ -130,9 +130,15 @@ export const formApi = createApi({
       invalidatesTags: ["ResumeList"],
     }),
 
-    downloadCoverLetter: build.mutation({
+    downloadFile: build.mutation({
       query: (fileKey) => ({
         url: `/general/download?file_key=${fileKey}`,
+        method: "GET",
+      }),
+    }),
+    downloadDefaultFile: build.mutation({
+      query: (fileKey) => ({
+        url: `/general/download/default?file_key=${fileKey}`,
         method: "GET",
       }),
     }),
@@ -167,5 +173,6 @@ export const {
 
   /* GENERAL FILE PROCESSING */
   useUploadFileMutation,
-  useDownloadCoverLetterMutation,
+  useDownloadFileMutation,
+  useDownloadDefaultFileMutation,
 } = formApi;

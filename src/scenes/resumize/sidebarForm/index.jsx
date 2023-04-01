@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -26,7 +26,7 @@ import useJobInfo from 'hooks/useJobInfo';
 import useCustomToast from 'hooks/useCustomToast';
 import useHiringManagerAndInstructions from 'hooks/useHiringManagerAndInstructions';
 
-const SidebarForm = () => {
+const SidebarForm = ({setResumeFile}) => {
 const [
   showUpload,
   setShowUpload,
@@ -68,6 +68,9 @@ const [
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const boxColor = useColorModeValue(undefined, 'gray.800');
 
+  useEffect(() => {
+    setResumeFile({fileKey:selectedResumeData.file_key, isDefault: false})
+  },[selectedResumeData,setResumeFile])
 
   const validateCompanyHandler = () => {
 
