@@ -9,10 +9,11 @@ const Resumize = () => {
   const bgColor = useColorModeValue('gray.50', 'gray.700');
   const viewerContainerWidth = isMobile ? "22rem" : "38rem";
   const viewerContainerHeight = isMobile ? "22rem" : "50rem";
-  const viewerContainerBorderColor = useColorModeValue("black","purple");
+  const viewerContainerBorderColor = useColorModeValue("black",undefined);
 
   const [resumeFile,setResumeFile] = useState(null)
   const [coverLetterFile,setCoverLetterFile] = useState(null)
+  const [submittedState,setSubmittedState] = useState(null)
 
   useEffect(() => {
     // You can replace these keys with the actual keys of your default files
@@ -28,25 +29,15 @@ const Resumize = () => {
     }
   }, [resumeFile,coverLetterFile]);
 
+    console.log(submittedState)
   return (
     <Flex>
-      <SidebarForm setResumeFile={setResumeFile}/>
+      <SidebarForm setResumeFile={setResumeFile} setCoverLetterFile={setCoverLetterFile} setSubmittedState={setSubmittedState}/>
       <Flex flexGrow="1" direction="row" flexWrap={'wrap'} ml={isMobile ? "0" : "50px"} gap={10} p={2} w='full' alignItems={'flex-start'} justify='center' bgColor={bgColor} minH={'100vh'}>
-          {resumeFile && <DocViewerContainer file={resumeFile} title={'Resume'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor}/>}
+          {resumeFile && <DocViewerContainer file={resumeFile} title={'Resume'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} isResume={true}/>}
           {coverLetterFile && 
           <VStack>
-            <DocViewerContainer file={coverLetterFile} title={'Cover Letter'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor}/>
-            <HStack spacing={4}>
-              <Button colorScheme="blue" variant="solid">
-                Reroll
-              </Button>
-              <Button colorScheme="green" variant="solid">
-                Edit
-              </Button>
-              <Button colorScheme="orange" variant="solid">
-                Save
-              </Button>
-            </HStack>
+            <DocViewerContainer file={coverLetterFile} title={'Cover Letter'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} submittedState={submittedState} isResume={false}/>
           </VStack>
           }
         {/* <ChatBox></ChatBox> */}

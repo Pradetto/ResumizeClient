@@ -25,7 +25,7 @@ function App() {
           />
           <Route
             path="/files"
-            element={isAuthenticated ? <Resumize /> : <Navigate to="/login" />}
+            // element={isAuthenticated ? <Resumize /> : <Navigate to="/login" />}
           />
           {/* <Route
             path="/profile"
