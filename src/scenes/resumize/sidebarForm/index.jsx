@@ -12,7 +12,8 @@ import {
   HStack,
   useDisclosure,
   useMediaQuery,
-  useColorModeValue
+  useColorModeValue,
+  Spinner
 } from '@chakra-ui/react';
 import { ChevronRightIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
@@ -26,7 +27,7 @@ import useJobInfo from 'hooks/useJobInfo';
 import useCustomToast from 'hooks/useCustomToast';
 import useHiringManagerAndInstructions from 'hooks/useHiringManagerAndInstructions';
 
-const SidebarForm = ({setResumeFile}) => {
+const SidebarForm = ({setResumeFile,setCoverLetterFile,setSubmittedState}) => {
 const [
   showUpload,
   setShowUpload,
@@ -60,7 +61,7 @@ const [
         clearCoverLetterInstructions,
     ] = useHiringManagerAndInstructions()
   const customToast = useCustomToast()
-  const [uploadForm] = useUploadFormMutation()
+  const [uploadForm, {isLoading}] = useUploadFormMutation()
   const [deleteDrafts] = useDeleteDraftsMutation()
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,7 +79,6 @@ const [
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('called 1')
 
     if (selectedCompany.id === '' || selectedCompany.company_name === ''){
         console.error("Selected Company error:");
@@ -98,47 +98,41 @@ const [
       });
       return
     }
-    
-    let data = {}
-    // console.log(selectedResumeFile)
-    // const resume_id = selectedResumeFile.split('/')[0]
-    // console.log(resume_id)
-    data = {resume: {...selectedResumeData}}
+
+    let data = {
+      resume: {...selectedResumeData},
+      company: {...selectedCompany},
+      job: {...selectedJob},
+      role: {...selectedRole},
+      hiring_manager: selectedHiringManager.id !== '' ? {...selectedHiringManager} : null,
+      instructions: coverLetterInstructions !== '' ? {coverLetter:coverLetterInstructions} : null
+    }
 
     try {
-      await uploadForm(data)
-      const templateData = {
-        user: {
-          firstname: "",
-          lastname: "",
-          address: "",
-          phone: "",
-          email: "",
-        },
-        date: new Date().toLocaleDateString(),
-        default_name: "",
-        render_employer: true,
-        required_employer: {
-          company_name: "",
-          role: "",
-        },
-        employer: {
-          hiring_manager: "",
-          address: "",
-          phone: "",
-          email: "",
-        },
-        content: {
-          introduction_paragraph: "",
-          body_paragraphs: [
-            "",
-            "",
-            "",
-          ],
-          closing_paragraph: "",
-        },
-      };
+      const res = await uploadForm(data)
+      if (res.error){
+        throw new Error(res.error.data.message)
+      }
+      data = {...data,cover_letter: {...res.data}}
+      
+      setCoverLetterFile({fileKey:res.data.file_key, isDefault: false})
+      setResumeFile({fileKey:data.resume.file_key, isDefault: false})
+      setSubmittedState(data)
+      onClose();
+      clearRoleFilters();
+      clearJobFilters();
+      clearCompanyFilters();
+      clearHiringManagerFilters();
+      clearCoverLetterInstructions();
+      /* CLEAR EVERYTHING AND CLOSE FORM OPENING */
+
     } catch (err){
+      console.log('here is the error',err.message)
+        customToast({
+        title: "Submission Error:",
+        description: `There was an issue submitting your request please try again. ${err.message}`,
+        status: "error",
+      });
       console.error(err.message)
     }
     // handle form submission logic here
@@ -240,19 +234,33 @@ const [
               />
               
               <DrawerFooter>
-                <HStack>    {/* DELET DRAFTS BUTTON */}
-              <Button colorScheme="red" onClick={() => {
-                deleteDrafts() 
-                clearRoleFilters()
-                clearJobFilters()
-                clearCompanyFilters()
-                clearHiringManagerFilters()
-                clearCoverLetterInstructions()
-                }}
-                >
-                  Del Drafts
-                </Button>
-                <Button type="submit" colorScheme='green'>Submit</Button>
+                <HStack>
+                  {/* DELET DRAFTS BUTTON */}
+                  {!isLoading &&    
+                  <>
+                <Button colorScheme="red" onClick={() => {
+                  deleteDrafts() 
+                  clearRoleFilters()
+                  clearJobFilters()
+                  clearCompanyFilters()
+                  clearHiringManagerFilters()
+                  clearCoverLetterInstructions()
+                  }}
+                  >
+                    Del Drafts
+                  </Button>
+                  <Button type="submit" colorScheme='green'>Submit</Button>
+                  </>
+                }
+                {isLoading && 
+                <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />
+                }
                 </HStack>
               </DrawerFooter>
             </Box>
