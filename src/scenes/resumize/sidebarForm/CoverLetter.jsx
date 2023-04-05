@@ -5,7 +5,7 @@ import {
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import FormTitle from 'components/FormTitle';
 
-const CoverLetter = ({coverLetterInstructions,setCoverLetterInstructions,selectedJob}) => {
+const CoverLetter = ({coverLetterInstructions,setCoverLetterInstructions,selectedJob, isFormLoading}) => {
     const generateCoverLetter = useState(true)
     return (
     <>
@@ -28,7 +28,7 @@ const CoverLetter = ({coverLetterInstructions,setCoverLetterInstructions,selecte
             onChange={(e) => setCoverLetterInstructions(e.target.value)}
             // isDisabled={!generateCoverLetter}
             placeholder="In addition to my resume I have a couple other skills relevant to this job description. Can you please add my Project Management and Google Data Analytics Certifications. Also, can you keep the tone semi-informal as I have a preexisitng relationship with the recruiter."
-            isDisabled={!selectedJob.id}
+            isDisabled={!selectedJob.id || isFormLoading}
             />
         </FormTitle>
         )}

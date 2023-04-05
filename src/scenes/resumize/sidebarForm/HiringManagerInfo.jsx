@@ -6,7 +6,7 @@ import FormTitle from 'components/FormTitle';
 import useCustomToast from 'hooks/useCustomToast';
 import { useCreateHiringManagerMutation, useGetRolesAndHiringManagerQuery } from 'state/formApi';
 
-const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,handleHiringManagerChange,selectedJob,selectedCompany }) => {
+const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,handleHiringManagerChange,selectedJob,selectedCompany, isFormLoading }) => {
   const {data: roleAndHiringManagerData} = useGetRolesAndHiringManagerQuery(selectedCompany.id, { skip: selectedCompany.id === '' })
   const [createHiringManager] = useCreateHiringManagerMutation()
   const customToast = useCustomToast();
@@ -64,7 +64,7 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
             })) || []
           }
           placeholder='Select or type to create...'
-          isDisabled={!selectedJob.id}
+          isDisabled={!selectedJob.id || isFormLoading}
         />
       </FormTitle>
     <FormTitle htmlFor="email" isRequired={false} text="Hiring Manager Email">
@@ -74,7 +74,7 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
           name="email"
           value={selectedHiringManager.email}
           onChange={handleHiringManagerChange}
-          isDisabled={!selectedJob.id}
+          isDisabled={!selectedJob.id || isFormLoading}
         />
       </FormTitle>
       <FormTitle htmlFor="phone" isRequired={false} text="Hiring Manager Phone">
@@ -84,7 +84,7 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
           name="phone"
           value={selectedHiringManager.phone}
           onChange={handleHiringManagerChange}
-          isDisabled={!selectedJob.id}
+          isDisabled={!selectedJob.id || isFormLoading}
         />
       </FormTitle>
       <FormTitle htmlFor="address" isRequired={false} text="Hiring Manager Address">
@@ -94,7 +94,7 @@ const HiringManagerInfo = ({ selectedHiringManager, setSelectedHiringManager,han
           name="address"
           value={selectedHiringManager.address}
           onChange={handleHiringManagerChange}
-          isDisabled={!selectedJob.id}
+          isDisabled={!selectedJob.id || isFormLoading}
         />
       </FormTitle>
     </>

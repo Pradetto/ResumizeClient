@@ -61,7 +61,7 @@ const [
         clearCoverLetterInstructions,
     ] = useHiringManagerAndInstructions()
   const customToast = useCustomToast()
-  const [uploadForm, {isLoading}] = useUploadFormMutation()
+  const [uploadForm, {isLoading: isFormLoading}] = useUploadFormMutation()
   const [deleteDrafts] = useDeleteDraftsMutation()
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -130,7 +130,7 @@ const [
       console.log('here is the error',err.message)
         customToast({
         title: "Submission Error:",
-        description: `There was an issue submitting your request please try again. ${err.message}`,
+        description: `There was an issue submitting your request please try again. Please validate Job Description and Instructions are clear and concise. If still having issues please Delete Drafts and try again. ${err.message}`,
         status: "error",
       });
       console.error(err.message)
@@ -192,6 +192,7 @@ const [
               setShowUpload={setShowUpload}
               handleFileInputChange={handleFileInputChange}
               handleResumeSelect={handleResumeSelect}
+              isFormLoading={isFormLoading}
               />
               <JobInfo 
               selectedCompany={selectedCompany}
@@ -205,12 +206,13 @@ const [
               clearRoleFilters={clearRoleFilters}
               selectedRole={selectedRole}
               setSelectedRole={setSelectedRole}
+              isFormLoading={isFormLoading}
               />
 
               <HStack gap={4} marginBottom="20px" justify={'center'}>
                 <Button
                   onClick={() => setShowOptionalFields(!showOptionalFields)}
-                  isDisabled={!selectedJob.id}
+                  isDisabled={!selectedJob.id || isFormLoading}
                 >
                   {showOptionalFields ? 'Hide' : 'Show'} Optional Fields
                 </Button>
@@ -223,6 +225,7 @@ const [
               handleHiringManagerChange={handleHiringManagerChange}
               selectedJob={selectedJob}
               selectedCompany={selectedCompany}
+              isFormLoading={isFormLoading}
               />}
               {/* RESUME STUFF CAN GO HERE */}
               <CoverLetter 
@@ -231,14 +234,15 @@ const [
               selectedHiringManager={selectedHiringManager}
               setSelectedHiringManager={setSelectedHiringManager}
               selectedJob={selectedJob}
+              isFormLoading={isFormLoading}
               />
               
               <DrawerFooter>
                 <HStack>
                   {/* DELET DRAFTS BUTTON */}
-                  {!isLoading &&    
+                  {!isFormLoading &&    
                   <>
-                <Button colorScheme="red" onClick={() => {
+                <Button colorScheme="red" isDisabled={isFormLoading} onClick={() => {
                   deleteDrafts() 
                   clearRoleFilters()
                   clearJobFilters()
@@ -249,10 +253,10 @@ const [
                   >
                     Del Drafts
                   </Button>
-                  <Button type="submit" colorScheme='green'>Submit</Button>
+                  <Button type="submit" colorScheme='green' isDisabled={isFormLoading}>Submit</Button>
                   </>
                 }
-                {isLoading && 
+                {isFormLoading && 
                 <Spinner
                 thickness='4px'
                 speed='0.65s'

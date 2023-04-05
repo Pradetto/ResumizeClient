@@ -20,6 +20,7 @@ const JobInfo = ({
   clearRoleFilters,
   selectedRole,
   setSelectedRole,
+  isFormLoading
 }) => {
   const {data: companiesListData} = useGetCompaniesListQuery()
   const [insertCompany] = useInsertCompanyMutation()
@@ -78,6 +79,7 @@ return (
         }
         placeholder="Select or type to create..."
         required
+        isDisabled={isFormLoading}
         // styles={customStyles}
       />
     </FormTitle>
@@ -118,7 +120,7 @@ return (
             const result = await existingLink(value)
             setSelectedJob(prevData => ({
               ...prevData,
-              id: res.data.id,
+              id: result.data.id,
               link: result.data.link,
               role_id:result.data.role_id,
               description: result.data.description
@@ -143,6 +145,7 @@ return (
         // styles={customStyles}
         noOptionsMessage={() => 'Press Enter or click here to create'}
         formatCreateLabel={(inputValue) => `Create "${inputValue}"`}
+        isDisabled={isFormLoading}
       />
     </FormTitle>
     }
@@ -204,6 +207,7 @@ return (
         }
         placeholder="Select or type to create..."
         required
+        isDisabled={isFormLoading}
         // styles={customStyles}
       />
     </FormTitle>
@@ -221,6 +225,7 @@ return (
         onChange={(e) => setSelectedJob(prevData => {
           return {...prevData, description:e.target.value}
         })}
+        isDisabled={isFormLoading}
       />
     </FormTitle>
     )}

@@ -9,7 +9,8 @@ const ResumeUpload = ({
   handleFileInputChange,
   handleResumeSelect,
   selectedResumeData,
-  setSelectedResumeData
+  setSelectedResumeData,
+  isFormLoading
 }) => {
   const {data:resumeListData} = useGetResumeListQuery()
 
@@ -31,6 +32,7 @@ const ResumeUpload = ({
             is_default: false
           })
         }}
+        isDisabled={isFormLoading}
       >
         {showUpload ? "Upload New Resume":"Select Existing Resume"}
       </Button>
@@ -54,6 +56,7 @@ const ResumeUpload = ({
               onChange={(option) => handleResumeSelect(option)}
               options={options}
               placeholder="--Select--"
+              isDisabled={isFormLoading}
             />
             {/* <Select
               id="selected-file"
@@ -73,6 +76,7 @@ const ResumeUpload = ({
               <Checkbox
                 isChecked={selectedResumeData.is_default}
                 onChange={() => setSelectedResumeData({...selectedResumeData, is_default: !selectedResumeData.is_default})}
+                isDisabled={isFormLoading}
               >
                 Set as default
               </Checkbox>
@@ -86,11 +90,13 @@ const ResumeUpload = ({
               type="file"
               id="resume-file"
               onChange={handleFileInputChange}
+              isDisabled={isFormLoading}
             />
           </FormControl>
           <Checkbox
             isChecked={selectedResumeData.is_default}
             onChange={() => setSelectedResumeData({...selectedResumeData, is_default: !selectedResumeData.is_default})}
+            isDisabled={isFormLoading}
           >
             Set as default
           </Checkbox>

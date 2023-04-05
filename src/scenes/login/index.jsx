@@ -39,7 +39,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('submitted')
     try {
       const response = await loginUser(formData).unwrap()
       console.log('Login User',response)

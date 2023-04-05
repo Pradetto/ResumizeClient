@@ -14,6 +14,7 @@ const Resumize = () => {
   const [resumeFile,setResumeFile] = useState(null)
   const [coverLetterFile,setCoverLetterFile] = useState(null)
   const [submittedState,setSubmittedState] = useState(null)
+  console.log(submittedState)
 
   useEffect(() => {
     // You can replace these keys with the actual keys of your default files
@@ -28,8 +29,6 @@ const Resumize = () => {
       setCoverLetterFile({fileKey:defaultCoverLetterFileKey,isDefault:true});
     }
   }, [resumeFile,coverLetterFile]);
-
-    console.log(submittedState)
   return (
     <Flex>
       <SidebarForm setResumeFile={setResumeFile} setCoverLetterFile={setCoverLetterFile} setSubmittedState={setSubmittedState}/>
