@@ -65,7 +65,6 @@ const Register = () => {
 
     try {
       const response = await registerUser(registerData).unwrap();
-      console.log('User Registered:', response);
       setFormData({
         firstname: '',
         lastname: '',

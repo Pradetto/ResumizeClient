@@ -21,7 +21,7 @@ import useCustomToast from "hooks/useCustomToast";
 import useLogout from "hooks/useLogout";
 
 const Login = () => {
-  const [loginUser, {error, data}] = useLoginUserMutation()
+  const [loginUser, {error}] = useLoginUserMutation()
   const {data: isAuthenticated} = useIsAuthenticatedQuery()
   const [formData, setFormData] = useState({
     email: "",
@@ -40,8 +40,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginUser(formData).unwrap()
-      console.log('Login User',response)
+      await loginUser(formData).unwrap()
       setFormData({email: "", password: "",remember: false})
       navigate('/home')
 

@@ -1,15 +1,17 @@
 import { useState,useEffect,useCallback } from "react";
-import { VStack, useColorModeValue,IconButton, Text,Box,HStack,Button } from "@chakra-ui/react";
+import { VStack, useColorModeValue,IconButton, Text,Box,HStack,Button, useBreakpointValue } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { useDownloadDefaultFileMutation, useDownloadFileMutation } from "state/formApi";
 
 
 const CustomHeader = ({ onRefresh,url,submittedState,isResume }) => {
-  const bgColor = useColorModeValue("gray.200", "gray.800");
+  const bgColor = useColorModeValue("gray.200", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.200");
   // const submittedState = true
-  const buttonSize = 'sm'
+  const isMobile = useBreakpointValue({ base: true, md: false });
+  const buttonSize = isMobile ? 'xs': 'sm'
+  const titleSize = isMobile ? 'xs' : 'md'
 
 
   const downloadHandler = (url) => {
@@ -23,7 +25,7 @@ const CustomHeader = ({ onRefresh,url,submittedState,isResume }) => {
       backgroundColor={bgColor}
       p={2}
     >
-      <Text fontSize="md" fontWeight="bold" color={textColor}>
+      <Text fontSize={titleSize} fontWeight="bold" color={textColor}>
         Document Viewer
       </Text>
 
@@ -56,7 +58,7 @@ const CustomHeader = ({ onRefresh,url,submittedState,isResume }) => {
 
 const DocViewerContainer = ({ file, title, width, height,viewerContainerBorderColor,submittedState,isResume }) => {
   const [docs, setDocs] = useState([]);
-  const [downloadFile, { isLoading }] = useDownloadFileMutation();
+  const [downloadFile] = useDownloadFileMutation();
   const [downloadDefaultFile] = useDownloadDefaultFileMutation()
   const [renderKey, setRenderKey] = useState(0);
 

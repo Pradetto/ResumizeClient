@@ -67,15 +67,15 @@ const [
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showOptionalFields, setShowOptionalFields] = useState(false);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
-  const boxColor = useColorModeValue(undefined, 'gray.800');
+  const boxColor = useColorModeValue(undefined, 'gray.700');
 
   useEffect(() => {
     setResumeFile({fileKey:selectedResumeData.file_key, isDefault: false})
   },[selectedResumeData,setResumeFile])
 
-  const validateCompanyHandler = () => {
+  // const validateCompanyHandler = () => {
 
-  }
+  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -127,7 +127,6 @@ const [
       /* CLEAR EVERYTHING AND CLOSE FORM OPENING */
 
     } catch (err){
-      console.log('here is the error',err.message)
         customToast({
         title: "Submission Error:",
         description: `There was an issue submitting your request please try again. Please validate Job Description and Instructions are clear and concise. If still having issues please Delete Drafts and try again. ${err.message}`,

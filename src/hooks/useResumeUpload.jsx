@@ -51,14 +51,11 @@ const useResumeUpload = () => {
     const handleResumeUpload = async (uploadResumedFile) => {
         if (!uploadResumedFile) return;
 
-        console.log("made it")
         try {
             const formData = new FormData()
             formData.append("file",uploadResumedFile)
             formData.append("isDefault",  selectedResumeData.is_default ? '1' : '0')
-            console.log('1')
             await uploadFile(formData).unwrap()
-            console.log('2')
             customToast({
             title: "Succesful resume upload",
             description: "You have successfully uploaded your resume.",

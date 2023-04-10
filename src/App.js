@@ -9,6 +9,7 @@ import ForgotPassword from "scenes/forgotPassword";
 import ResetPassword from "scenes/resetPassword";
 import { useIsAuthenticatedQuery } from "state/authApi";
 import UserProfile from "scenes/userProfile";
+import Files from "scenes/files";
 
 function App() {
   const { data: isAuthenticated } = useIsAuthenticatedQuery();
@@ -23,16 +24,7 @@ function App() {
             path="/resumize"
             element={isAuthenticated ? <Resumize /> : <Navigate to="/login" />}
           />
-          <Route
-            path="/files"
-            // element={isAuthenticated ? <Resumize /> : <Navigate to="/login" />}
-          />
-          {/* <Route
-            path="/profile"
-            element={
-              isAuthenticated ? <UserProfile /> : <Navigate to="/login" />
-            }
-          /> */}
+          <Route path="/files" element={<Files />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

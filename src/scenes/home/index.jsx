@@ -12,7 +12,7 @@ const Home = () => {
   const {data: isAuthenticated} = useIsAuthenticatedQuery()
 
   const { colorMode } = useColorMode();
-  const bgColor = useColorModeValue('gray.50', 'gray.700');
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
   // const boxColor = useColorModeValue('white', 'gray.800');
   const buttonColor = colorMode === "dark" ? "purple.700" : undefined;
   const buttonTextColor = colorMode === "dark" ? "white" : undefined;

@@ -15,8 +15,9 @@ import useCustomToast from 'hooks/useCustomToast';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
-  const [forgotPassword, {data,error}] = useForgotPasswordMutation()
+  const [forgotPassword, {error}] = useForgotPasswordMutation()
   const customToast = useCustomToast()
+
 
   const handleEmail = (e) => {
     setEmail(e.target.value)

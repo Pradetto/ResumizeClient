@@ -13,10 +13,13 @@ import { SettingsIcon } from "@chakra-ui/icons";
 import { useColorMode } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { useIsAuthenticatedQuery } from "state/authApi";
+import { useContactInfoQuery } from "state/formApi";
 
 const SettingsMenu = ({ logoutHandler, onClose, isDesktop }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const {data:isAuthenticated} = useIsAuthenticatedQuery()
+  const {data:user} = useContactInfoQuery()
+  console.log(user)
 
   const handleClose = () => {
     if (onClose && !isDesktop) {
@@ -36,6 +39,10 @@ const SettingsMenu = ({ logoutHandler, onClose, isDesktop }) => {
         </MenuItem>
         <MenuItem as={RouterLink} to="/resetpassword" onClick={handleClose}>
           Update Password
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem >
+          {/* Tokens: {Number(user.tokens_remaining)} */}
         </MenuItem>
         <MenuDivider />
         </>}

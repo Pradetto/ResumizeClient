@@ -77,7 +77,7 @@ const ResetPassword = () => {
     }
 
 
-    console.log("neeed to validate reset errors work")
+
   };
   return (
   <Flex

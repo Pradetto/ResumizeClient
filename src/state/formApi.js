@@ -26,6 +26,7 @@ export const formApi = createApi({
         method: "GET",
       }),
       providesTags: ["ContactInfo"],
+      invalidateTags: [""],
     }),
 
     /* RESUME */
@@ -117,6 +118,7 @@ export const formApi = createApi({
         method: "POST",
         body: data,
       }),
+      invalidateTags: ["ContactInfo"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
     }),
 
     /* GENERAL FILE PROCESSING */

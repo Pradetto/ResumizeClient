@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Flex, useColorModeValue, HStack, Button, VStack, useBreakpointValue } from '@chakra-ui/react';
+import { Flex, useColorModeValue, VStack, useBreakpointValue } from '@chakra-ui/react';
 import React from 'react';
 import DocViewerContainer from './DocViewerContainer';
 import SidebarForm from './sidebarForm';
 
 const Resumize = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const bgColor = useColorModeValue('gray.50', 'gray.700');
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
   const viewerContainerWidth = isMobile ? "22rem" : "38rem";
   const viewerContainerHeight = isMobile ? "22rem" : "50rem";
   const viewerContainerBorderColor = useColorModeValue("black",undefined);

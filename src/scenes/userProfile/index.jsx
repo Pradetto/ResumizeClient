@@ -22,20 +22,6 @@ const UserProfile = () => {
   const textColor = useColorModeValue("gray.700", "gray.200");
   const {data:user,isLoading,error} = useContactInfoQuery()
 
-  // const user = {
-  //   firstName: "John",
-  //   lastName: "Doe",
-  //   email: "john.doe@example.com",
-  //   currentTokens: 100,
-  //   phoneNumber: "817-676-8533",
-  //   address: "123 Main St, Anytown, USA",
-  //   job: "Software Engineer",
-  //   linkedIn: "https://www.linkedin.com/in/johndoe",
-  //   website: "https://www.johndoe.com",
-  //   github: "https://github.com/johndoe",
-  //   twitter: "https://twitter.com/johndoe",
-  // };
-
     const optionalFields = useMemo(() => {
     return {
       linkedIn: {
