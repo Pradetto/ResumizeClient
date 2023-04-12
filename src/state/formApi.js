@@ -18,6 +18,7 @@ export const formApi = createApi({
     "RolesAndHiringManagers",
     "CreateRole",
     "CreateHiringManager",
+    "AllFiles",
   ],
   endpoints: (build) => ({
     contactInfo: build.query({
@@ -118,7 +119,7 @@ export const formApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidateTags: ["ContactInfo"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
+      invalidatesTags: ["ContactInfo", "AllFiles"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
     }),
 
     /* GENERAL FILE PROCESSING */
@@ -143,6 +144,14 @@ export const formApi = createApi({
         url: `/general/download/default?file_key=${fileKey}`,
         method: "GET",
       }),
+    }),
+    getAllFiles: build.query({
+      query: () => ({
+        url: `/general/files`,
+        method: "GET",
+      }),
+      providesTags: ["AllFiles"],
+      invalidatesTags: [],
     }),
   }),
 });
@@ -177,4 +186,5 @@ export const {
   useUploadFileMutation,
   useDownloadFileMutation,
   useDownloadDefaultFileMutation,
+  useGetAllFilesQuery,
 } = formApi;
