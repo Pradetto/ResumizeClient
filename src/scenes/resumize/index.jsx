@@ -14,7 +14,7 @@ const Resumize = () => {
   const [resumeFile,setResumeFile] = useState(null)
   const [coverLetterFile,setCoverLetterFile] = useState(null)
   const [submittedState,setSubmittedState] = useState(null)
-  console.log(submittedState)
+  console.log('here is the submitted state',submittedState)
 
   useEffect(() => {
     // You can replace these keys with the actual keys of your default files
@@ -36,7 +36,7 @@ const Resumize = () => {
           {resumeFile && <DocViewerContainer file={resumeFile} title={'Resume'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} isResume={true}/>}
           {coverLetterFile && 
           <VStack>
-            <DocViewerContainer file={coverLetterFile} title={'Cover Letter'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} submittedState={submittedState} isResume={false}/>
+            <DocViewerContainer file={coverLetterFile} title={'Cover Letter'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} submittedState={submittedState} isResume={false} setCoverLetterFile={setCoverLetterFile}/>
           </VStack>
           }
         {/* <ChatBox></ChatBox> */}

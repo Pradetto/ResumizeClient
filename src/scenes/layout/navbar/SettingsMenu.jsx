@@ -19,7 +19,7 @@ const SettingsMenu = ({ logoutHandler, onClose, isDesktop }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const {data:isAuthenticated} = useIsAuthenticatedQuery()
   const {data:user} = useContactInfoQuery()
-  console.log(user)
+  // console.log(user)
 
   const handleClose = () => {
     if (onClose && !isDesktop) {

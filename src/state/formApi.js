@@ -121,6 +121,14 @@ export const formApi = createApi({
       }),
       invalidatesTags: ["ContactInfo", "AllFiles"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
     }),
+    rerollAndEditCoverLetter: build.mutation({
+      query: (data) => ({
+        url: `/chat/prompt`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["ContactInfo", "AllFiles"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
+    }),
 
     /* GENERAL FILE PROCESSING */
     uploadFile: build.mutation({
@@ -181,6 +189,7 @@ export const {
 
   /* SUBMIT */
   useUploadFormMutation,
+  useRerollAndEditCoverLetterMutation,
 
   /* GENERAL FILE PROCESSING */
   useUploadFileMutation,
