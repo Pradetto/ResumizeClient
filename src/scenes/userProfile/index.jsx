@@ -50,6 +50,7 @@ const UserProfile = () => {
     return <Error/>
   }
 
+  console.log('Here is profile info',user)
 
   return (
     <Container

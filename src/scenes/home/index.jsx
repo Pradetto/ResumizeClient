@@ -31,11 +31,11 @@ const Home = () => {
             Resumize
           </Heading>
           <Heading as="h2" size="xl" mb={4}>
-            Tailored Resumes and Cover Letters
+            Tailored Cover Letters
           </Heading>
           <Text fontSize="2xl" mb={8}>
             Let Resumize help you stand out from the crowd with a personalized
-            resume and cover letter that matches the job description.
+            cover letter that matches the job description.
           </Text>
           {!isAuthenticated && <Link as={RouterLink} to="/login">
             <Button colorScheme="blue" size="lg" mr={4}>

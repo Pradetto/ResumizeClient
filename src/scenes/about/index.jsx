@@ -24,18 +24,18 @@ const About = () => {
               iconName: 'FaUpload',
             },
             {
-              title: 'Tailor Your Resume and Cover Letter',
-              description: 'Resumize generates a tailored resume and cover letter based on the job link and description you provide.',
+              title: 'Tailor Cover Letter',
+              description: 'Resumize generates a tailored cover letter based on the job link and description you provide.',
               iconName: 'FaPen',
             },
             {
               title: 'Save Time and Effort',
-              description: 'Resumize saves you time and effort by creating customized resumes and cover letters automatically.',
+              description: 'Resumize saves you time and effort by creating customized cover letters automatically.',
               iconName: 'FaClock',
             },
             {
               title: 'Increase Your Chances',
-              description: 'Increase your chances of getting the job you want with a tailored resume and cover letter that match the job requirements.',
+              description: 'Increase your chances of getting the job you want with a tailored cover letter that match the job requirements.',
               iconName: 'FaCheck',
             },
           ]
@@ -48,7 +48,7 @@ const About = () => {
             About Resumize
           </Heading>
           <Text fontSize='xl' textAlign='center' maxWidth='800px'>
-            Resumize is a web app that helps you create tailored resumes and cover letters for specific job applications. Upload your resume, paste a job link and description, and let Resumize do the rest.
+            Resumize is a web app that helps you create tailored cover letters for specific job applications. Upload your resume, paste a job link and description, and let Resumize do the rest.
           </Text>
         </VStack>
 

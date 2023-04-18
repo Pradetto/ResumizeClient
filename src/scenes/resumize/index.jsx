@@ -36,7 +36,7 @@ const Resumize = () => {
           {resumeFile && <DocViewerContainer file={resumeFile} title={'Resume'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} isResume={true}/>}
           {coverLetterFile && 
           <VStack>
-            <DocViewerContainer file={coverLetterFile} title={'Cover Letter'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} submittedState={submittedState} isResume={false} setCoverLetterFile={setCoverLetterFile}/>
+            <DocViewerContainer file={coverLetterFile} title={'Cover Letter'} width={viewerContainerWidth} height={viewerContainerHeight} viewerContainerBorderColor={viewerContainerBorderColor} submittedState={submittedState} setSubmittedState={setSubmittedState} isResume={false} setCoverLetterFile={setCoverLetterFile}/>
           </VStack>
           }
         {/* <ChatBox></ChatBox> */}
