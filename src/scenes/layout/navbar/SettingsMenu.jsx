@@ -18,8 +18,9 @@ import { useContactInfoQuery } from "state/formApi";
 const SettingsMenu = ({ logoutHandler, onClose, isDesktop }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const {data:isAuthenticated} = useIsAuthenticatedQuery()
-  const {data:user} = useContactInfoQuery()
-  // console.log(user)
+  const {data} = useContactInfoQuery()
+
+  let user = data || {}
 
   const handleClose = () => {
     if (onClose && !isDesktop) {
@@ -42,7 +43,7 @@ const SettingsMenu = ({ logoutHandler, onClose, isDesktop }) => {
         </MenuItem>
         <MenuDivider />
         <MenuItem >
-          {/* Tokens: {Number(user.tokens_remaining)} */}
+          Tokens: {Number(user.tokens_remaining).toLocaleString("en-US")}
         </MenuItem>
         <MenuDivider />
         </>}

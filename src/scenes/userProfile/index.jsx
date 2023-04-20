@@ -18,9 +18,22 @@ import Loading from "components/Loading";
 import DeleteProfileModal from "./DeleteProfileModal";
 
 const UserProfile = () => {
-  const bg = useColorModeValue("white", "gray.800");
+  const bg = useColorModeValue("gray.50", "gray.800");
   const textColor = useColorModeValue("gray.700", "gray.200");
-  const {data:user,isLoading,error} = useContactInfoQuery()
+  const {data,isLoading,error} = useContactInfoQuery()
+
+  let user = data || {}
+
+    const formattedAddress = useMemo(() => {
+    const addy = user.address
+      ? user.address.split(",").map((line) => line.trim())
+      : [];
+    if (addy.length > 0){
+      return addy[0]
+    } else {
+      return []
+    }
+  }, [user.address]);
 
     const optionalFields = useMemo(() => {
     return {
@@ -50,8 +63,6 @@ const UserProfile = () => {
     return <Error/>
   }
 
-  console.log('Here is profile info',user)
-
   return (
     <Container
       minHeight="calc(100vh - 72px)"
@@ -61,6 +72,8 @@ const UserProfile = () => {
       alignItems="center"
       bg={bg}
       px={8}
+      minWidth={'full'}
+      minH={'100vh'}
     >
       <VStack spacing={4} width="100%" maxWidth="md">
         <Avatar size="2xl" name={`${user.firstname} ${user.lastname}`} />
@@ -71,9 +84,9 @@ const UserProfile = () => {
           {user.job}
         </Text> */}
         <UserDataField label="Email" value={user.email} />
-        <UserDataField label="Current Tokens" value={user.currentTokens} />
+        <UserDataField label="Current Tokens" value={Number(user.tokens_remaining).toLocaleString("en-US")} />
         <UserDataField label="Phone Number" value={user.phone} />
-        <UserDataField label="Address" value={user.address} />
+        <UserDataField label="Address" value={formattedAddress} />
 
         <Stack direction="row" spacing={3}>
           {Object.entries(optionalFields).map(([key, field]) => {

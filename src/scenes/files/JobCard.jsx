@@ -100,10 +100,10 @@ const JobCard = ({ job }) => {
             <ModalCloseButton />
             <ModalBody>
               <VStack align="start" spacing="2">
-                {job.hiringManager && <Text>Hiring Manager: {job.hiringManager}</Text>}
-                {job.email && <Text>Email: {job.email}</Text>}
-                {job.phone && <Text>Phone: {job.phone}</Text>}
-                {job.address && <Text>Address: {job.address}</Text>}
+                {job.hiringManager && <Text fontWeight={'bold'}>Hiring Manager: <Box as='span' fontWeight={'normal'}>{job.hiringManager}</Box></Text>}
+                {job.email && <Text fontWeight={'bold'}>Email: <Box as='span' fontWeight={'normal'}>{job.email}</Box></Text>}
+                {job.phone && <Text fontWeight={'bold'}>Phone: <Box as='span' fontWeight={'normal'}>{job.phone}</Box></Text>}
+                {job.address && <Text fontWeight={'bold'}>Address: <Box as='span' fontWeight={'normal'}>{job.address}</Box></Text>}
               </VStack>
             </ModalBody>
             <ModalFooter>
