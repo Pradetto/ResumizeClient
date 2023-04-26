@@ -18,6 +18,10 @@ import {
   ModalFooter,
   Textarea,
   useDisclosure,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription
 } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
@@ -120,9 +124,15 @@ const CustomHeader = ({ onRefresh,url,submittedState,setSubmittedState,isResume,
             <Textarea
               value={editComment}
               onChange={(e) => setEditComment(e.target.value)}
-              placeholder="Enter your edit comment here"
+              placeholder="Enter your edit comment here. It is best to be as specific as possible."
               size="sm"
+              minHeight={20}
             />
+            <Alert status='error' mt={2}>
+              <AlertIcon />
+              <AlertTitle>Deleting Current File!</AlertTitle>
+              <AlertDescription>Note that AI-generated cover letter changes cannot be guaranteed, so please download your current cover letter before generating a new one to avoid potential overwriting.</AlertDescription>
+            </Alert>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handleEditSubmit}>

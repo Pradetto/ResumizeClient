@@ -1,21 +1,27 @@
+import { useEffect,useState } from "react";
 import { Button, Container, Flex, Heading, Text, Link,useColorModeValue, useColorMode } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import { motion } from "framer-motion";
-import unemployed from "../../assets/unemployed.svg";
 import { useIsAuthenticatedQuery } from "state/authApi";
+import Lottie from 'lottie-react'
 
 const Home = () => {
-  const spinAnimation = {
-    rotate: 360,
-    transition: { duration: 2, loop: Infinity },
-  };
+
   const {data: isAuthenticated} = useIsAuthenticatedQuery()
 
   const { colorMode } = useColorMode();
   const bgColor = useColorModeValue('gray.50', 'gray.800');
-  // const boxColor = useColorModeValue('white', 'gray.800');
   const buttonColor = colorMode === "dark" ? "purple.700" : undefined;
   const buttonTextColor = colorMode === "dark" ? "white" : undefined;
+
+  const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    fetch('https://assets6.lottiefiles.com/packages/lf20_4DLPlW.json')
+      .then(response => response.json())
+      .then(data => {
+        setAnimationData(data);
+      });
+  }, []);
 
   return (
     <Flex direction="column" minHeight="var(--main-container-height)" bg={bgColor}>
@@ -35,7 +41,7 @@ const Home = () => {
           </Heading>
           <Text fontSize="2xl" mb={8}>
             Let Resumize help you stand out from the crowd with a personalized
-            cover letter that matches the job description.
+            cover letter that matches the job description. Please be aware that Resumize is an AI-powered platform, and as a result, the results produced may be inaccurate or contain errors.
           </Text>
           {!isAuthenticated && <Link as={RouterLink} to="/login">
             <Button colorScheme="blue" size="lg" mr={4}>
@@ -53,14 +59,8 @@ const Home = () => {
             </Button>
           </Link>
         </Container>
-        <Flex justify="center" flexGrow="1" paddingTop={{ base: "2rem", lg: "0" }}>
-          <motion.img
-            src={unemployed}
-            alt="Unemployed"
-            height={400}
-            width={400}
-            style={spinAnimation}
-          />
+        <Flex justify="center" flexGrow="1" paddingTop={{ base: "2rem", lg: "0" }} boxSize={500}>
+          <Lottie animationData={animationData} />
         </Flex>
       </Flex>
       <Flex align="center" justify="center" padding="1rem" >

@@ -14,7 +14,6 @@ const Resumize = () => {
   const [resumeFile,setResumeFile] = useState(null)
   const [coverLetterFile,setCoverLetterFile] = useState(null)
   const [submittedState,setSubmittedState] = useState(null)
-  console.log('here is the submitted state',submittedState)
 
   useEffect(() => {
     // You can replace these keys with the actual keys of your default files

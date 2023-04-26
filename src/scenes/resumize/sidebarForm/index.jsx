@@ -73,7 +73,7 @@ const [
     setResumeFile({fileKey:selectedResumeData.file_key, isDefault: false})
   },[selectedResumeData,setResumeFile])
 
-  console.log(selectedCompany,selectedResumeData,selectedJob,selectedRole,selectedHiringManager)
+  // console.log(selectedCompany,selectedResumeData,selectedJob,selectedRole,selectedHiringManager)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
