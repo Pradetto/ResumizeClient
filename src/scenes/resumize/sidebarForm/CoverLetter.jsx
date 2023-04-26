@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { 
     Textarea
 } from '@chakra-ui/react';
-import { InfoOutlineIcon } from '@chakra-ui/icons';
+// import { InfoOutlineIcon } from '@chakra-ui/icons';
 import FormTitle from 'components/FormTitle';
 
 const CoverLetter = ({coverLetterInstructions,setCoverLetterInstructions,selectedJob, isFormLoading}) => {

@@ -8,8 +8,6 @@ import {
   Input,
   Stack,
   useColorModeValue,
-  Alert,
-  AlertIcon,
   InputGroup,
   InputRightElement,
   Text
@@ -22,10 +20,10 @@ import useCustomToast from 'hooks/useCustomToast';
 const ResetPassword = () => {
   const {token} = useParams()
   const [formData, setFormData] = useState({ email: '', password: '', password2: '',token: token || '' });
-  const [passwordNotMatch, setPasswordNotMatch] = useState('');
+  // const [passwordNotMatch, setPasswordNotMatch] = useState('');
   const { data: isAuthenticated } = useIsAuthenticatedQuery();
-  const [updatePassword,{data:updateMessage,error:updateError}] = useUpdatePasswordMutation()
-  const [resetPassword,{data:resetMessage,error:resetError}] = useResetPasswordMutation()
+  const [updatePassword,{error:updateError}] = useUpdatePasswordMutation()
+  const [resetPassword,{error:resetError}] = useResetPasswordMutation()
   const [showPassword, setShowPassword] = useState(false);
   const customToast = useCustomToast()
 
@@ -35,9 +33,8 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
     if (formData.password !== formData.password2) {
-      setPasswordNotMatch('Passwords do not match');
+      // setPasswordNotMatch('Passwords do not match');
       customToast({
         title: 'Error.',
         description: 'Passwords do not match.',
@@ -45,7 +42,7 @@ const ResetPassword = () => {
       });
       return;
     } else {
-      setPasswordNotMatch('');
+      // setPasswordNotMatch('');
     }
 
     /* IF USER LOGGED IN OR OUT TRYING TO UPDATE PASSWORD */

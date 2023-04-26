@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Flex,
   HStack,
@@ -12,7 +12,7 @@ import {
 import { FiMenu } from "react-icons/fi";
 import { GoFile } from "react-icons/go";
 import NavLink from "components/Navlink";
-import { useIsAuthenticatedQuery, useLogoutUserMutation } from "state/authApi";
+import { useIsAuthenticatedQuery } from "state/authApi";
 import MobileNav from "./MobileNav";
 import SettingsMenu from "./SettingsMenu";
 import useLogout from "hooks/useLogout";
