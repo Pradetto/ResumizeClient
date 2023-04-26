@@ -39,6 +39,3 @@ function App() {
 }
 
 export default App;
-
-/* <Route path="/resumes" element={<Home />} />
-<Route path="/coverletters" element={<Home />} /> */
