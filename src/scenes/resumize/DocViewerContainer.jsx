@@ -48,7 +48,7 @@ const CustomHeader = ({ onRefresh,url,submittedState,setSubmittedState,isResume,
   },[isLoading,setIsLoading2])
 
   const submitHandler = async () => {
-    console.log('submitted state',submittedState)
+    // console.log('submitted state',submittedState)
     const res = await rerollAndEditSubmit(submittedState)
     setCoverLetterFile({fileKey:res.data.file_key, isDefault: false})
     setSubmittedState({...submittedState,cover_letter:{
@@ -61,13 +61,13 @@ const CustomHeader = ({ onRefresh,url,submittedState,setSubmittedState,isResume,
   const handleEditSubmit = async () => {
     onClose();
     const updatedSubmittedState = { ...submittedState, editComment };
-    console.log('Here is the updatedSubmittedState',updatedSubmittedState)
+    // console.log('Here is the updatedSubmittedState',updatedSubmittedState)
     const res = await rerollAndEditSubmit(updatedSubmittedState);
     setSubmittedState({...submittedState,cover_letter:{
       file_key: res.data.file_key,
       id: res.data.id
     }})
-    console.log(res);
+    // console.log(res);
     setCoverLetterFile({ fileKey: res.data.file_key, isDefault: false });
   };
 

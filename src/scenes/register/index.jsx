@@ -93,7 +93,7 @@ const Register = () => {
       phone: sanitizeInput(formData.phone),
     };
 
-    console.log(registerData)
+    // console.log(registerData)
 
     try {
       await registerUser(registerData).unwrap();

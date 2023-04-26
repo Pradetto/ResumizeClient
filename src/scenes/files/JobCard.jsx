@@ -44,7 +44,7 @@ const JobCard = ({ job }) => {
 
   const handleBoxClick = () => {
     const fullUrl = addUrlPrefix(job.jobLink);
-    console.log(fullUrl);
+    // console.log(fullUrl);
     window.open(fullUrl, '_blank');
   };
 
@@ -52,7 +52,7 @@ const JobCard = ({ job }) => {
       e.stopPropagation();
       try{
         const { data } = await downloadFile(fileKey);
-        console.log(data)
+        // console.log(data)
         const url = data.url;
         window.open(url)
       } catch(err){
