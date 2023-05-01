@@ -83,17 +83,13 @@ const Register = () => {
     return;
   }
 
-    // Combine the address fields into a single string
     const fullAddress = `${formData.street}, ${formData.apt}, ${formData.city}, ${formData.state}, ${formData.postalCode}, ${formData.country}`;
 
-    // Include the fullAddress in the data sent to the backend
     const registerData = {
       ...formData,
       address: fullAddress,
       phone: sanitizeInput(formData.phone),
     };
-
-    // console.log(registerData)
 
     try {
       await registerUser(registerData).unwrap();

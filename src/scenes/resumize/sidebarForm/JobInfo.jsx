@@ -2,7 +2,6 @@ import React from 'react'
 import { 
   Textarea,
 } from '@chakra-ui/react';
-// import CreatableSelect from 'react-select/creatable';
 import { CreatableSelect } from "chakra-react-select";
 import FormTitle from 'components/FormTitle';
 import { useCreateJobMutation, useGetCompaniesListQuery, useGetRolesAndHiringManagerQuery, useInsertCompanyMutation, useGetExistingLinkMutation, useCreateRoleMutation } from 'state/formApi';
@@ -80,7 +79,6 @@ return (
         placeholder="Select or type to create..."
         required
         isDisabled={isFormLoading}
-        // styles={customStyles}
       />
     </FormTitle>
     
@@ -142,7 +140,6 @@ return (
         placeholder={jobUrlPlaceholder}
         required
         components={customComponents}
-        // styles={customStyles}
         noOptionsMessage={() => 'Press Enter or click here to create'}
         formatCreateLabel={(inputValue) => `Create "${inputValue}"`}
         isDisabled={isFormLoading}

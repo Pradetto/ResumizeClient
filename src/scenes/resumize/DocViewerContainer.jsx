@@ -35,7 +35,6 @@ import {
 const CustomHeader = ({ onRefresh,url,submittedState,setSubmittedState,isResume,setCoverLetterFile,setIsLoading2 }) => {
   const bgColor = useColorModeValue("gray.200", "gray.700");
   const textColor = useColorModeValue("gray.800", "gray.200");
-  // const submittedState = true
   const isMobile = useBreakpointValue({ base: true, md: false });
   const buttonSize = isMobile ? 'xs': 'sm'
   const titleSize = isMobile ? 'xs' : 'md'
@@ -48,26 +47,22 @@ const CustomHeader = ({ onRefresh,url,submittedState,setSubmittedState,isResume,
   },[isLoading,setIsLoading2])
 
   const submitHandler = async () => {
-    // console.log('submitted state',submittedState)
     const res = await rerollAndEditSubmit(submittedState)
     setCoverLetterFile({fileKey:res.data.file_key, isDefault: false})
     setSubmittedState({...submittedState,cover_letter:{
       file_key: res.data.file_key,
       id: res.data.id
     }})
-    // UPDATE SUBMITTEDSTATE
   }
 
   const handleEditSubmit = async () => {
     onClose();
     const updatedSubmittedState = { ...submittedState, editComment };
-    // console.log('Here is the updatedSubmittedState',updatedSubmittedState)
     const res = await rerollAndEditSubmit(updatedSubmittedState);
     setSubmittedState({...submittedState,cover_letter:{
       file_key: res.data.file_key,
       id: res.data.id
     }})
-    // console.log(res);
     setCoverLetterFile({ fileKey: res.data.file_key, isDefault: false });
   };
 
@@ -107,7 +102,6 @@ const CustomHeader = ({ onRefresh,url,submittedState,setSubmittedState,isResume,
         Save
         </Button>
       <IconButton
-      // boxSize={'1rem'}
       onClick={onRefresh}
       colorScheme="blue"
       size="xs"

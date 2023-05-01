@@ -70,7 +70,6 @@ const Files = () => {
             <JobCard
               key={job.id}
               job={job}
-              // Pass other props as needed
             />
           ))}
         </SimpleGrid>

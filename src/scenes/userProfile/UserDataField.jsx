@@ -1,4 +1,3 @@
-// components/UserDataField.js
 import { HStack, Text } from "@chakra-ui/react";
 
 const UserDataField = ({ label, value }) => {

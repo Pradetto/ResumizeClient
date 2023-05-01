@@ -80,9 +80,6 @@ const UserProfile = () => {
         <Text fontSize="2xl" fontWeight="bold" color={textColor}>
           {user.firstname} {user.lastname}
         </Text>
-        {/* <Text fontSize="xl" color={textColor}>
-          {user.job}
-        </Text> */}
         <UserDataField label="Email" value={user.email} />
         <UserDataField label="Current Tokens" value={Number(user.tokens_remaining).toLocaleString("en-US")} />
         <UserDataField label="Phone Number" value={user.phone} />

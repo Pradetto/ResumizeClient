@@ -119,7 +119,7 @@ export const formApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["ContactInfo", "AllFiles"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
+      invalidatesTags: ["ContactInfo", "AllFiles"],
     }),
     rerollAndEditCoverLetter: build.mutation({
       query: (data) => ({
@@ -127,7 +127,7 @@ export const formApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["ContactInfo", "AllFiles"], // AUDIT IF THIS DOES WHAT IT IS SUPPOSED TO DO I WANT AFTER THE FORM IS UPLOAD TO RERENDER THE CORRECT AMOUNT OF TOKENS A USER HAS LEFT
+      invalidatesTags: ["ContactInfo", "AllFiles"],
     }),
 
     /* GENERAL FILE PROCESSING */

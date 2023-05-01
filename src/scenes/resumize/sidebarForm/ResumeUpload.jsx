@@ -58,21 +58,6 @@ const ResumeUpload = ({
               placeholder="--Select--"
               isDisabled={isFormLoading}
             />
-            {/* <Select
-              id="selected-file"
-              value={selectedResumeData.file_key}
-              onChange={handleResumeSelect}
-            >
-              <option value="">--Select--</option>
-              {resumeListData?.map((resume) => {
-                return (
-                  <option
-                    key={resume.id}
-                    value={resume.file_key}
-                  >{resume.file_name}</option>
-                )
-              })}
-            </Select> */}
               <Checkbox
                 isChecked={selectedResumeData.is_default}
                 onChange={() => setSelectedResumeData({...selectedResumeData, is_default: !selectedResumeData.is_default})}
