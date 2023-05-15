@@ -2,7 +2,6 @@ import React from 'react';
 import { Input } from '@chakra-ui/react';
 import { CreatableSelect } from 'chakra-react-select';
 import FormTitle from 'components/FormTitle';
-// import { useGetHiringManagersQuery, useCreateHiringManagerMutation } from './fictitiousApi';
 import useCustomToast from 'hooks/useCustomToast';
 import { useCreateHiringManagerMutation, useGetRolesAndHiringManagerQuery } from 'state/formApi';
 

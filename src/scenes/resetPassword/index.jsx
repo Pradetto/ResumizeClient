@@ -20,7 +20,6 @@ import useCustomToast from 'hooks/useCustomToast';
 const ResetPassword = () => {
   const {token} = useParams()
   const [formData, setFormData] = useState({ email: '', password: '', password2: '',token: token || '' });
-  // const [passwordNotMatch, setPasswordNotMatch] = useState('');
   const { data: isAuthenticated } = useIsAuthenticatedQuery();
   const [updatePassword,{error:updateError}] = useUpdatePasswordMutation()
   const [resetPassword,{error:resetError}] = useResetPasswordMutation()
@@ -34,7 +33,6 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.password2) {
-      // setPasswordNotMatch('Passwords do not match');
       customToast({
         title: 'Error.',
         description: 'Passwords do not match.',
@@ -42,7 +40,6 @@ const ResetPassword = () => {
       });
       return;
     } else {
-      // setPasswordNotMatch('');
     }
 
     /* IF USER LOGGED IN OR OUT TRYING TO UPDATE PASSWORD */

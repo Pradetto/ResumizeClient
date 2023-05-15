@@ -26,7 +26,6 @@ const useHiringManagerAndInstructions = () => {
       [key]: value
     }));
   };
-  // console.log(selectedHiringManager)
   return [
     coverLetterInstructions,
     setCoverLetterInstructions,

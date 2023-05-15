@@ -30,11 +30,6 @@ const JobCard = ({ job }) => {
     onOpen();
   };
 
-  // const handleButtonClick = (e) => {
-  //   e.preventDefault();
-
-  //   console.log('Button clicked');
-  // };
   const addUrlPrefix = (url) => {
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
     return 'https://' + url;
@@ -44,7 +39,6 @@ const JobCard = ({ job }) => {
 
   const handleBoxClick = () => {
     const fullUrl = addUrlPrefix(job.jobLink);
-    // console.log(fullUrl);
     window.open(fullUrl, '_blank');
   };
 
@@ -52,7 +46,6 @@ const JobCard = ({ job }) => {
       e.stopPropagation();
       try{
         const { data } = await downloadFile(fileKey);
-        // console.log(data)
         const url = data.url;
         window.open(url)
       } catch(err){
@@ -118,78 +111,3 @@ const JobCard = ({ job }) => {
 };
 
 export default JobCard;
-
-
-// const JobCard = ({ job, hiringManager, name, email, phone, address }) => {
-//   const { isOpen, onOpen, onClose } = useDisclosure();
-//   const bgColor = useColorModeValue('gray.50', 'gray.800');
-
-//   return (
-//     <Link as={RouterLink} to={``} _hover={{ textDecoration: 'none' }}>
-//       <Box
-//         onClick={(e) => e.stopPropagation()}
-//         w="100%"
-//         borderWidth="1px"
-//         borderRadius="lg"
-//         overflow="hidden"
-//         bgColor={bgColor}
-//         _hover={{ cursor: 'pointer', transform: 'scale(1.02)' }}
-//         transition="all 0.2s ease-in"
-//       >
-//         <VStack p="4" spacing="2">
-//           <Text fontSize="2xl" fontWeight="bold">{job.companyName}</Text>
-//           <Text fontSize="lg">{job.position}</Text>
-//           <Box
-//             px="2"
-//             maxH="200px"
-//             overflowY="scroll"
-//             css={{
-//               '&::-webkit-scrollbar': {
-//                 width: '4px',
-//               },
-//               '&::-webkit-scrollbar-track': {
-//                 backgroundColor: 'pink',
-//               },
-//               '&::-webkit-scrollbar-thumb': {
-//                 backgroundColor: 'orange',
-//                 borderRadius: '8px',
-//               },
-//             }}
-//           >
-//             <Text>{job.description}</Text>
-//           </Box>
-//           <HStack>
-//             <Button>Download Resume</Button>
-//             <Button>Download Cover Letter</Button>
-//             {job.contactInfoAvailable && (
-//               <Button onClick={onOpen} leftIcon={<BsPersonFill />}>
-//                 Contact
-//               </Button>
-//             )}
-//           </HStack>
-//         </VStack>
-//         <Modal isOpen={isOpen} onClose={onClose}>
-//           <ModalOverlay />
-//           <ModalContent>
-//             <ModalHeader>Contact Information</ModalHeader>
-//             <ModalCloseButton />
-//             <ModalBody>
-//               <VStack align="start" spacing="2">
-//                 {hiringManager && <Text>Hiring Manager: {hiringManager}</Text>}
-//                 {name && <Text>Name: {name}</Text>}
-//                 {email && <Text>Email: {email}</Text>}
-//                 {phone && <Text>Phone: {phone}</Text>}
-//                 {address && <Text>Address: {address}</Text>}
-//               </VStack>
-//             </ModalBody>
-//             <ModalFooter>
-//               <Button colorScheme="blue" onClick={onClose}>
-//                 Close
-//               </Button>
-//             </ModalFooter>
-//           </ModalContent>
-//         </Modal>
-//       </Box>
-//     </Link>
-//   );
-// };

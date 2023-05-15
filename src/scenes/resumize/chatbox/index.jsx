@@ -1,7 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react'
 import { VStack, useMediaQuery, Text,Box, HStack, Button,Flex,AvatarBadge,Avatar, Textarea } from "@chakra-ui/react";
 import { FiSend } from "react-icons/fi";
-import Lottie from 'lottie-react'
 
 const ChatBox = () => {
     const [isMobile] = useMediaQuery("(max-width: 768px)")

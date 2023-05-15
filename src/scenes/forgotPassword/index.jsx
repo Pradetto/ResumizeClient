@@ -24,7 +24,6 @@ const ForgotPassword = () => {
   }
   const handleSubmit = async () =>{
     try{
-      // console.log(email)
       await forgotPassword({email})
       setEmail('')
       customToast({
